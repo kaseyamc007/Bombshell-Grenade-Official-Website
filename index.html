@@ -277,58 +277,46 @@
     </section>
 
     <!-- =====================================================================
-         Official Instagram Feed (@bombshellgrenade) — Latest 3 Posts
+         Official Facebook Feed (@BombshellGrenade) — Latest 3 Posts
          ===================================================================== -->
-    <section class="container ig-feed-section fb-feed-section" id="instagram-feed-section">
-      <div class="ig-feed-header-wrapper fb-feed-header-wrapper">
+    <section class="container fb-feed-section" id="facebook-feed-section">
+      <div class="fb-feed-header-wrapper">
         <div>
-          <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px; flex-wrap: wrap;">
-            <span class="badge-fire" style="background: linear-gradient(135deg, rgba(225, 48, 108, 0.2), rgba(245, 158, 11, 0.2)); border-color: rgba(225, 48, 108, 0.4); color: #f472b6;">
-              <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24" style="margin-right: 4px;"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
-              Social Radar &bull; Verified Instagram Feed
+          <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px;">
+            <span class="badge-fire">
+              <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24" style="margin-right: 4px;"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+              Social Radar &bull; Verified Meta Feed
             </span>
-            <div class="ig-sync-status-pill fb-sync-status-pill" id="ig-sync-pill" title="Connected to real-time live stream">
-              <span class="ig-sync-dot fb-sync-dot"></span>
-              <span id="ig-sync-status-text">Real-Time Live Sync</span>
-            </div>
-            <div class="ig-live-timer-badge" id="ig-live-timer-badge" title="Real-time live sync telemetry">
-              <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-              <span>Synced: <strong id="ig-live-elapsed-time">Just now</strong></span>
-              <span style="opacity: 0.4;">|</span>
-              <span>Next: <strong id="ig-live-countdown">25s</strong></span>
+            <div class="fb-sync-status-pill" id="fb-sync-pill">
+              <span class="fb-sync-dot"></span>
+              <span id="fb-sync-status-text">Live Facebook Feed</span>
             </div>
           </div>
           <h2 style="font-size: clamp(1.8rem, 3.5vw, 2.6rem); margin-bottom: 6px;">
-            LATEST FROM <span class="gold-foil">INSTAGRAM</span>
+            LATEST FROM <span class="gold-foil">FACEBOOK</span>
           </h2>
           <p style="color: var(--text-muted); font-size: 0.95rem;">
-            Official direct posts from <a href="https://www.instagram.com/bombshellgrenade" target="_blank" rel="noopener noreferrer" style="color: var(--fire-amber); font-weight: 700;">@bombshellgrenade</a> &bull; Real-time synchronized to the latest 3 posts
+            Official direct posts from <a href="https://web.facebook.com/BombshellGrenade" target="_blank" rel="noopener noreferrer" style="color: var(--fire-amber); font-weight: 700;">@BombshellGrenade</a> &bull; Keeping the homepage feed updated to the latest 3 posts
           </p>
         </div>
 
-        <div class="ig-feed-controls fb-feed-controls">
-          <!-- Instant Live Sync Button -->
-          <button type="button" class="btn btn-outline-gold btn-sm" id="btn-quick-ig-sync" title="Trigger Instant Live Instagram Sync" style="display: inline-flex; align-items: center; gap: 7px;">
-            <svg class="sync-icon-spin" id="quick-sync-icon" width="15" height="15" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
-            <span>Live Sync</span>
-          </button>
-
-          <!-- Creative Upload / Sync Instagram Posts Button -->
-          <button type="button" class="btn btn-fire btn-sm" id="btn-open-ig-sync-modal" style="display: inline-flex; align-items: center; gap: 8px;">
+        <div class="fb-feed-controls">
+          <!-- Creative Upload / Sync Facebook Posts Button -->
+          <button type="button" class="btn btn-fire btn-sm" id="btn-open-fb-sync-modal" style="display: inline-flex; align-items: center; gap: 8px;">
             <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
-            <span>Instagram Feed Studio</span>
+            <span>Upload / Sync Facebook Post</span>
           </button>
 
           <!-- Follow Page Button -->
-          <a href="https://www.instagram.com/bombshellgrenade" target="_blank" rel="noopener noreferrer" class="btn btn-secondary btn-sm" style="display: inline-flex; align-items: center; gap: 8px;">
-            <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
-            <span>Visit @bombshellgrenade</span>
+          <a href="https://web.facebook.com/BombshellGrenade" target="_blank" rel="noopener noreferrer" class="btn btn-secondary btn-sm" style="display: inline-flex; align-items: center; gap: 8px;">
+            <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+            <span>Visit @BombshellGrenade</span>
           </a>
         </div>
       </div>
 
-      <!-- Feed Container (Renders Latest 3 Instagram Posts) -->
-      <div class="ig-posts-grid fb-posts-grid" id="ig-feed-grid">
+      <!-- Feed Container (Renders Latest 3 Facebook Posts) -->
+      <div class="fb-posts-grid" id="fb-feed-grid">
         <!-- Rendered dynamically by script.js -->
       </div>
     </section>
@@ -359,47 +347,47 @@
     </section>
   </main>
 
-  <!-- Global Instagram Upload & Sync Studio Modal -->
-  <div class="ig-modal-backdrop fb-modal-backdrop" id="ig-upload-modal" role="dialog" aria-modal="true" aria-labelledby="ig-modal-title">
-    <div class="ig-modal-dialog fb-modal-dialog">
-      <header class="ig-modal-header fb-modal-header">
-        <div class="ig-modal-header-title fb-modal-header-title">
-          <div style="width: 38px; height: 38px; border-radius: 10px; background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); display: flex; align-items: center; justify-content: center; color: #fff; box-shadow: 0 4px 12px rgba(225, 48, 108, 0.4);">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+  <!-- Global Facebook Upload & Sync Studio Modal -->
+  <div class="fb-modal-backdrop" id="fb-upload-modal" role="dialog" aria-modal="true" aria-labelledby="fb-modal-title">
+    <div class="fb-modal-dialog">
+      <header class="fb-modal-header">
+        <div class="fb-modal-header-title">
+          <div style="width: 38px; height: 38px; border-radius: 50%; background: #1877f2; display: flex; align-items: center; justify-content: center; color: #fff;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
           </div>
           <div>
-            <h3 id="ig-modal-title" style="font-size: 1.15rem; color: #fff; margin: 0;">Instagram Feed Studio</h3>
-            <span style="font-size: 0.78rem; color: var(--text-muted);">Sync &amp; Upload Posts &bull; instagram.com/bombshellgrenade</span>
+            <h3 id="fb-modal-title" style="font-size: 1.15rem; color: #fff; margin: 0;">Facebook Feed Studio</h3>
+            <span style="font-size: 0.78rem; color: var(--text-muted);">Sync &amp; Upload Posts &bull; web.facebook.com/BombshellGrenade</span>
           </div>
         </div>
-        <button type="button" class="ig-modal-close fb-modal-close" id="ig-modal-close-btn" aria-label="Close modal">
+        <button type="button" class="fb-modal-close" id="fb-modal-close-btn" aria-label="Close modal">
           <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
         </button>
       </header>
 
       <!-- Tabs Navigation -->
-      <div class="ig-modal-tabs fb-modal-tabs">
-        <button type="button" class="ig-modal-tab-btn fb-modal-tab-btn active" data-tab="tab-ig-upload">
+      <div class="fb-modal-tabs">
+        <button type="button" class="fb-modal-tab-btn active" data-tab="tab-fb-upload">
           <span>Upload New Post</span>
         </button>
-        <button type="button" class="ig-modal-tab-btn fb-modal-tab-btn" data-tab="tab-ig-sync">
+        <button type="button" class="fb-modal-tab-btn" data-tab="tab-fb-sync">
           <span>Live Sync &amp; Feed JSON</span>
         </button>
       </div>
 
-      <div class="ig-modal-body fb-modal-body">
+      <div class="fb-modal-body">
         <!-- Tab 1: Upload Post Form -->
-        <div class="ig-modal-tab-pane fb-modal-tab-pane" id="tab-ig-upload">
-          <form id="ig-upload-form">
+        <div class="fb-modal-tab-pane" id="tab-fb-upload">
+          <form id="fb-upload-form">
             <div style="margin-bottom: 16px;">
-              <label for="ig-upload-caption" style="display: block; font-size: 0.85rem; font-weight: 700; color: #fff; margin-bottom: 6px;">
-                Instagram Caption / Description *
+              <label for="fb-upload-caption" style="display: block; font-size: 0.85rem; font-weight: 700; color: #fff; margin-bottom: 6px;">
+                Post Caption / Status Text *
               </label>
               <textarea 
-                id="ig-upload-caption" 
+                id="fb-upload-caption" 
                 rows="4" 
                 class="form-control" 
-                placeholder="Write or copy post text from her Instagram @bombshellgrenade... (hashtags like #MfumuKadzi #BombNation auto-highlight)"
+                placeholder="Copy or write the post coming from her Facebook page... (hashtags like #MfumuKadzi #BombNation auto-highlight)"
                 required
                 style="width: 100%; background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 12px; color: #fff; font-family: inherit; font-size: 0.92rem; outline: none; resize: vertical;"
               ></textarea>
@@ -410,22 +398,22 @@
               <label style="display: block; font-size: 0.85rem; font-weight: 700; color: #fff; margin-bottom: 6px;">
                 Upload Post Photo / Media
               </label>
-              <div class="ig-dropzone fb-dropzone" id="ig-image-dropzone">
-                <input type="file" id="ig-post-file-input" accept="image/*" />
-                <svg width="32" height="32" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="color: #ec4899; margin: 0 auto 8px; display: block;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+              <div class="fb-dropzone" id="fb-image-dropzone">
+                <input type="file" id="fb-post-file-input" accept="image/*" />
+                <svg width="32" height="32" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="color: var(--fire-orange); margin: 0 auto 8px; display: block;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
                 <p style="font-size: 0.88rem; color: #fff; font-weight: 600; margin-bottom: 4px;">
-                  Drag &amp; drop Instagram photo here, or <span style="color: var(--fire-amber); text-decoration: underline;">browse files</span>
+                  Drag &amp; drop post image here, or <span style="color: var(--fire-amber); text-decoration: underline;">browse files</span>
                 </p>
-                <span style="font-size: 0.75rem; color: var(--text-muted);">Supports PNG, JPG, WEBP &bull; Instant local preview &amp; storage</span>
+                <span style="font-size: 0.75rem; color: var(--text-muted);">Supports PNG, JPG, WEBP &bull; Instant local encoding</span>
                 <div>
-                  <img id="ig-dropzone-preview" class="ig-dropzone-preview fb-dropzone-preview" alt="Uploaded Preview" />
+                  <img id="fb-dropzone-preview" class="fb-dropzone-preview" alt="Uploaded Preview" />
                 </div>
               </div>
               <div style="display: flex; align-items: center; gap: 8px;">
                 <span style="font-size: 0.78rem; color: var(--text-muted);">OR Image URL:</span>
                 <input 
                   type="url" 
-                  id="ig-upload-image-url" 
+                  id="fb-upload-image-url" 
                   placeholder="https://... or src/hero-banner.jpg"
                   style="flex: 1; background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 8px 12px; color: #fff; font-size: 0.85rem;"
                 />
@@ -435,26 +423,26 @@
             <!-- Two Column Row: Date & URL -->
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 16px;">
               <div>
-                <label for="ig-upload-time" style="display: block; font-size: 0.85rem; font-weight: 700; color: #fff; margin-bottom: 6px;">
+                <label for="fb-upload-time" style="display: block; font-size: 0.85rem; font-weight: 700; color: #fff; margin-bottom: 6px;">
                   Timestamp
                 </label>
                 <input 
                   type="text" 
-                  id="ig-upload-time" 
+                  id="fb-upload-time" 
                   value="Just now" 
-                  placeholder="e.g. 2 hours ago, Yesterday"
+                  placeholder="e.g. 1 hour ago, Yesterday at 16:00"
                   style="width: 100%; background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 8px 12px; color: #fff; font-size: 0.85rem;"
                 />
               </div>
               <div>
-                <label for="ig-upload-url" style="display: block; font-size: 0.85rem; font-weight: 700; color: #fff; margin-bottom: 6px;">
-                  Direct Instagram Post URL
+                <label for="fb-upload-url" style="display: block; font-size: 0.85rem; font-weight: 700; color: #fff; margin-bottom: 6px;">
+                  Direct Facebook Post URL
                 </label>
                 <input 
                   type="url" 
-                  id="ig-upload-url" 
-                  value="https://www.instagram.com/bombshellgrenade" 
-                  placeholder="https://www.instagram.com/p/..."
+                  id="fb-upload-url" 
+                  value="https://web.facebook.com/BombshellGrenade" 
+                  placeholder="https://web.facebook.com/BombshellGrenade/posts/..."
                   style="width: 100%; background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 8px 12px; color: #fff; font-size: 0.85rem;"
                 />
               </div>
@@ -462,67 +450,57 @@
 
             <!-- Estimated Likes -->
             <div style="margin-bottom: 24px;">
-              <label for="ig-upload-likes" style="display: block; font-size: 0.85rem; font-weight: 700; color: #fff; margin-bottom: 6px;">
-                Initial Hearts / Likes Count
+              <label for="fb-upload-likes" style="display: block; font-size: 0.85rem; font-weight: 700; color: #fff; margin-bottom: 6px;">
+                Initial Likes / Reactions Count
               </label>
               <input 
                 type="number" 
-                id="ig-upload-likes" 
-                value="14200" 
+                id="fb-upload-likes" 
+                value="2400" 
                 min="0"
                 style="width: 100%; background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 8px 12px; color: #fff; font-size: 0.85rem;"
               />
             </div>
 
-            <button type="submit" class="btn btn-fire" style="width: 100%; justify-content: center; background: linear-gradient(135deg, #e1306c, #ea580c);">
-              <span>Publish to Homepage Instagram Feed</span>
+            <button type="submit" class="btn btn-fire" style="width: 100%; justify-content: center;">
+              <span>Publish to Homepage Bottom Feed</span>
               <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
             </button>
           </form>
         </div>
 
         <!-- Tab 2: Sync & JSON Feed -->
-        <div class="ig-modal-tab-pane fb-modal-tab-pane" id="tab-ig-sync" style="display: none;">
-          <div style="background: rgba(34, 197, 94, 0.08); border: 1px solid rgba(34, 197, 94, 0.35); border-radius: var(--radius-sm); padding: 16px; margin-bottom: 20px;">
-            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; flex-wrap: wrap; gap: 8px;">
-              <h4 style="font-size: 0.95rem; color: #4ade80; margin: 0; display: flex; align-items: center; gap: 6px;">
-                <span class="ig-sync-dot" style="margin-right: 4px;"></span>
-                Real-Time Live Synchronization Active
-              </h4>
-              <span id="ig-stream-status-badge" style="font-size: 0.72rem; color: #a7f3d0; background: rgba(34, 197, 94, 0.2); padding: 2px 8px; border-radius: 9999px; border: 1px solid rgba(34, 197, 94, 0.3);">
-                SSE Stream Connected
-              </span>
-            </div>
-            <p style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.6; margin-bottom: 8px;">
-              The feed continuously listens for real-time live updates from <strong>@bombshellgrenade</strong> on Instagram. Posts published in any window, updated via server API, or synchronized in the background are instantly updated across all client screens without page reloads.
+        <div class="fb-modal-tab-pane" id="tab-fb-sync" style="display: none;">
+          <div style="background: rgba(234, 88, 12, 0.08); border: 1px solid var(--border-fire); border-radius: var(--radius-sm); padding: 16px; margin-bottom: 20px;">
+            <h4 style="font-size: 0.95rem; color: var(--fire-amber); margin-bottom: 6px; display: flex; align-items: center; gap: 6px;">
+              <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+              Automatic Synchronization Notice
+            </h4>
+            <p style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.6;">
+              Posts uploaded here are immediately stored in browser state and pushed as the newest item, automatically maintaining the <strong>latest 3 Facebook posts</strong> visible to visitors. You can also trigger a live sync check or reset to default curated posts.
             </p>
-            <div style="font-size: 0.78rem; color: var(--text-muted); display: flex; gap: 14px; flex-wrap: wrap;">
-              <span>Target: <strong style="color: #f472b6;">instagram.com/bombshellgrenade</strong></span>
-              <span>Sync Interval: <strong style="color: #fde047;">Real-Time + 25s Heartbeat</strong></span>
-              <span>Mode: <strong style="color: #4ade80;">Full-Duplex Server Stream</strong></span>
-            </div>
           </div>
 
           <div style="display: flex; gap: 12px; margin-bottom: 20px; flex-wrap: wrap;">
-            <button type="button" class="btn btn-fire btn-sm" id="btn-sync-ig-live" style="display: inline-flex; align-items: center; gap: 6px; background: linear-gradient(135deg, #e1306c, #ea580c);">
-              <svg class="sync-icon-spin" width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
-              <span>Instant Live Sync with Instagram</span>
+            <button type="button" class="btn btn-fire btn-sm" id="btn-sync-fb-live" style="display: inline-flex; align-items: center; gap: 6px;">
+              <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+              <span>Sync Latest from Facebook Page</span>
             </button>
-            <button type="button" class="btn btn-secondary btn-sm" id="btn-reset-ig-defaults">
+            <button type="button" class="btn btn-secondary btn-sm" id="btn-reset-fb-defaults">
               <span>Reset to Curated Defaults</span>
             </button>
           </div>
 
           <div>
-            <label for="ig-json-editor" style="display: block; font-size: 0.85rem; font-weight: 700; color: #fff; margin-bottom: 6px;">
-              Live Batch Feed JSON (Import / Export)
+            <label for="fb-json-editor" style="display: block; font-size: 0.85rem; font-weight: 700; color: #fff; margin-bottom: 6px;">
+              Batch Feed JSON (Import / Export)
             </label>
             <textarea 
-              id="ig-json-editor" 
+              id="fb-json-editor" 
               rows="6" 
               style="width: 100%; background: #08080c; border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 10px; color: #a5f3fc; font-family: monospace; font-size: 0.78rem; outline: none; margin-bottom: 12px;"
             ></textarea>
-            <button type="button" class="btn btn-secondary btn-sm" id="btn-import-ig-json">
+            <button type="button" class="btn btn-secondary btn-sm" id="btn-import-fb-json">
               <span>Update Feed from JSON</span>
             </button>
           </div>

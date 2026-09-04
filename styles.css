@@ -83,7 +83,20 @@ body {
   background: var(--fire-amber);
 }
 
-/* Background Embers & Flames Canvas */
+/* Background Lion Hologram Canvas (MGM Style "Leo the Lion" Motion Hologram) */
+#lion-hologram-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.88;
+  mix-blend-mode: screen;
+}
+
+/* Background Embers & Flames Canvas (Reduced by 25% opacity: 0.85 -> 0.64) */
 #ember-canvas {
   position: fixed;
   top: 0;
@@ -92,7 +105,7 @@ body {
   height: 100%;
   pointer-events: none;
   z-index: 1;
-  opacity: 0.85;
+  opacity: 0.64;
   mix-blend-mode: screen;
 }
 
@@ -623,6 +636,69 @@ img {
   color: #fef08a;
   font-style: normal;
   font-weight: 600;
+}
+
+/* Hologram Status Badge */
+.hologram-status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(23, 23, 32, 0.7);
+  border: 1px solid rgba(245, 158, 11, 0.4);
+  padding: 6px 14px;
+  border-radius: var(--radius-full);
+  margin-top: 12px;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+  user-select: none;
+  font-family: var(--font-sans);
+  font-size: 0.78rem;
+  letter-spacing: 1px;
+  color: #fef08a;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(8px);
+}
+
+.hologram-status-badge:hover {
+  background: rgba(234, 88, 12, 0.2);
+  border-color: var(--fire-gold);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(245, 158, 11, 0.25);
+}
+
+.holo-pulse-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #22c55e;
+  box-shadow: 0 0 10px #22c55e;
+  animation: pulseGlow 1.5s infinite;
+}
+
+.holo-sound-bars {
+  display: inline-flex;
+  align-items: flex-end;
+  gap: 2px;
+  height: 12px;
+}
+
+.holo-sound-bars i {
+  display: block;
+  width: 2px;
+  background: var(--fire-gold);
+  border-radius: 1px;
+  animation: holoSoundEq 1.2s infinite ease-in-out;
+}
+
+.holo-sound-bars i:nth-child(1) { height: 40%; animation-delay: 0.1s; }
+.holo-sound-bars i:nth-child(2) { height: 80%; animation-delay: 0.25s; }
+.holo-sound-bars i:nth-child(3) { height: 100%; animation-delay: 0.4s; }
+.holo-sound-bars i:nth-child(4) { height: 60%; animation-delay: 0.15s; }
+.holo-sound-bars i:nth-child(5) { height: 30%; animation-delay: 0.3s; }
+
+@keyframes holoSoundEq {
+  0%, 100% { transform: scaleY(0.4); }
+  50% { transform: scaleY(1.2); }
 }
 
 .hero-tagline {
@@ -1643,17 +1719,14 @@ img {
 }
 
 /* ==========================================================================
-   OFFICIAL INSTAGRAM FEED & UPLOAD STUDIO (Homepage Bottom Feed)
-   Page: https://www.instagram.com/bombshellgrenade
+   OFFICIAL FACEBOOK FEED & UPLOAD STUDIO (Homepage Bottom Feed)
    ========================================================================== */
-.ig-feed-section,
 .fb-feed-section {
   margin-bottom: 80px;
   position: relative;
   z-index: 2;
 }
 
-.ig-feed-header-wrapper,
 .fb-feed-header-wrapper {
   display: flex;
   justify-content: space-between;
@@ -1665,13 +1738,12 @@ img {
   padding-bottom: 20px;
 }
 
-.ig-sync-status-pill,
 .fb-sync-status-pill {
   display: inline-flex;
   align-items: center;
   gap: 8px;
   background: rgba(34, 197, 94, 0.12);
-  border: 1px solid rgba(34, 197, 94, 0.4);
+  border: 1px solid rgba(34, 197, 94, 0.35);
   color: #4ade80;
   font-size: 0.78rem;
   font-weight: 700;
@@ -1679,83 +1751,22 @@ img {
   text-transform: uppercase;
   padding: 5px 12px;
   border-radius: var(--radius-full);
-  box-shadow: 0 0 15px rgba(34, 197, 94, 0.15);
 }
 
-.ig-sync-dot,
 .fb-sync-dot {
   width: 8px;
   height: 8px;
   border-radius: 50%;
   background-color: #22c55e;
-  box-shadow: 0 0 10px #22c55e, 0 0 4px #22c55e;
-  animation: pulseDot 1.8s infinite cubic-bezier(0.4, 0, 0.6, 1);
-  position: relative;
-}
-
-.ig-sync-dot::after {
-  content: '';
-  position: absolute;
-  inset: -3px;
-  border-radius: 50%;
-  border: 1.5px solid rgba(34, 197, 94, 0.6);
-  animation: radarWave 1.8s infinite ease-out;
-}
-
-@keyframes radarWave {
-  0% { transform: scale(1); opacity: 1; }
-  100% { transform: scale(2.6); opacity: 0; }
+  box-shadow: 0 0 8px #22c55e;
+  animation: pulseDot 2s infinite;
 }
 
 @keyframes pulseDot {
   0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.35; transform: scale(0.85); }
+  50% { opacity: 0.4; transform: scale(0.85); }
 }
 
-.ig-live-timer-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  color: var(--text-muted);
-  font-size: 0.75rem;
-  padding: 4px 10px;
-  border-radius: var(--radius-full);
-  font-family: var(--font-mono, monospace);
-}
-
-.ig-live-timer-badge strong {
-  color: #fde047;
-}
-
-.sync-icon-spin.spinning {
-  animation: rotateSync 0.85s linear infinite;
-}
-
-@keyframes rotateSync {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
-
-.ig-post-card.live-synced-flash {
-  animation: liveCardFlash 1.6s ease-out;
-}
-
-@keyframes liveCardFlash {
-  0% {
-    border-color: rgba(225, 48, 108, 1);
-    box-shadow: 0 0 35px rgba(225, 48, 108, 0.65), 0 0 10px rgba(245, 158, 11, 0.4);
-    transform: translateY(-6px) scale(1.015);
-  }
-  100% {
-    border-color: rgba(234, 88, 12, 0.25);
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.45);
-    transform: translateY(0) scale(1);
-  }
-}
-
-.ig-feed-controls,
 .fb-feed-controls {
   display: flex;
   align-items: center;
@@ -1763,8 +1774,7 @@ img {
   flex-wrap: wrap;
 }
 
-/* Instagram Feed 3-Column Grid */
-.ig-posts-grid,
+/* Facebook Feed 3-Column Grid */
 .fb-posts-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -1772,21 +1782,18 @@ img {
 }
 
 @media (max-width: 1024px) {
-  .ig-posts-grid,
   .fb-posts-grid {
     grid-template-columns: repeat(2, 1fr);
   }
 }
 
 @media (max-width: 640px) {
-  .ig-posts-grid,
   .fb-posts-grid {
     grid-template-columns: 1fr;
   }
 }
 
-/* Individual Post Card */
-.ig-post-card,
+/* Individual Facebook Post Card */
 .fb-post-card {
   background: rgba(18, 18, 24, 0.85);
   border: 1px solid rgba(234, 88, 12, 0.25);
@@ -1799,14 +1806,12 @@ img {
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.45);
 }
 
-.ig-post-card:hover,
 .fb-post-card:hover {
   transform: translateY(-4px);
-  border-color: rgba(225, 48, 108, 0.5);
-  box-shadow: 0 16px 40px rgba(225, 48, 108, 0.16);
+  border-color: rgba(234, 88, 12, 0.6);
+  box-shadow: 0 16px 40px rgba(234, 88, 12, 0.18);
 }
 
-.ig-card-header,
 .fb-card-header {
   padding: 16px 18px 12px;
   display: flex;
@@ -1814,22 +1819,10 @@ img {
   justify-content: space-between;
 }
 
-.ig-author-row,
 .fb-author-row {
   display: flex;
   align-items: center;
   gap: 12px;
-}
-
-/* Signature Instagram Story Ring Gradient */
-.ig-avatar-ring {
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  padding: 2.5px;
-  background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
-  flex-shrink: 0;
-  box-shadow: 0 2px 8px rgba(225, 48, 108, 0.3);
 }
 
 .fb-avatar-ring {
@@ -1841,7 +1834,6 @@ img {
   flex-shrink: 0;
 }
 
-.ig-avatar-img,
 .fb-avatar-img {
   width: 100%;
   height: 100%;
@@ -1850,12 +1842,10 @@ img {
   background: var(--bg-black);
 }
 
-.ig-author-details,
 .fb-author-details {
   line-height: 1.25;
 }
 
-.ig-author-name,
 .fb-author-name {
   color: #fff;
   font-weight: 700;
@@ -1865,13 +1855,6 @@ img {
   gap: 6px;
 }
 
-.ig-verified-badge {
-  width: 15px;
-  height: 15px;
-  color: #3897f0;
-  flex-shrink: 0;
-}
-
 .fb-verified-badge {
   width: 15px;
   height: 15px;
@@ -1879,7 +1862,6 @@ img {
   flex-shrink: 0;
 }
 
-.ig-post-time,
 .fb-post-time {
   font-size: 0.78rem;
   color: var(--text-muted);
@@ -1887,14 +1869,6 @@ img {
   align-items: center;
   gap: 4px;
   margin-top: 3px;
-}
-
-.ig-network-icon {
-  width: 24px;
-  height: 24px;
-  color: #e1306c;
-  opacity: 0.85;
-  transition: var(--transition-smooth);
 }
 
 .fb-network-icon {
@@ -1905,20 +1879,17 @@ img {
   transition: var(--transition-smooth);
 }
 
-.ig-post-card:hover .ig-network-icon,
 .fb-post-card:hover .fb-network-icon {
   opacity: 1;
   transform: scale(1.1);
 }
 
 /* Post Content Body */
-.ig-card-body,
 .fb-card-body {
   padding: 0 18px 14px;
   flex-grow: 1;
 }
 
-.ig-post-text,
 .fb-post-text {
   font-size: 0.93rem;
   line-height: 1.65;
@@ -1926,31 +1897,27 @@ img {
   word-break: break-word;
 }
 
-.ig-post-text a, .ig-post-tag,
 .fb-post-text a, .fb-post-tag {
   color: var(--fire-amber);
   font-weight: 600;
   text-decoration: none;
 }
 
-.ig-post-text a:hover, .ig-post-tag:hover,
 .fb-post-text a:hover, .fb-post-tag:hover {
   text-decoration: underline;
   color: #fde047;
 }
 
 /* Post Media Frame */
-.ig-media-container,
 .fb-media-container {
   width: 100%;
-  height: 240px;
+  height: 230px;
   background: #0d0d12;
   position: relative;
   overflow: hidden;
   cursor: pointer;
 }
 
-.ig-media-img,
 .fb-media-img {
   width: 100%;
   height: 100%;
@@ -1958,12 +1925,10 @@ img {
   transition: transform 0.5s ease;
 }
 
-.ig-post-card:hover .ig-media-img,
 .fb-post-card:hover .fb-media-img {
   transform: scale(1.03);
 }
 
-.ig-media-overlay-badge,
 .fb-media-overlay-badge {
   position: absolute;
   bottom: 10px;
@@ -1980,18 +1945,7 @@ img {
   gap: 4px;
 }
 
-.ig-heart-pulse-anim {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%) scale(0);
-  opacity: 0;
-  pointer-events: none;
-  transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.4s ease;
-}
-
 /* Engagement Bar */
-.ig-engagement-bar,
 .fb-engagement-bar {
   padding: 10px 18px;
   display: flex;
@@ -2003,20 +1957,17 @@ img {
   color: var(--text-muted);
 }
 
-.ig-reactions-group,
 .fb-reactions-group {
   display: flex;
   align-items: center;
   gap: 6px;
 }
 
-.ig-emojis-cluster,
 .fb-emojis-cluster {
   display: flex;
   align-items: center;
 }
 
-.ig-emoji-bubble,
 .fb-emoji-bubble {
   width: 20px;
   height: 20px;
@@ -2030,11 +1981,10 @@ img {
 }
 
 .fb-emoji-like { background: #1877f2; }
-.fb-emoji-love, .ig-emoji-love { background: #e11d48; }
-.fb-emoji-fire, .ig-emoji-fire { background: #ea580c; }
+.fb-emoji-love { background: #e11d48; }
+.fb-emoji-fire { background: #ea580c; }
 
 /* Interactive Action Buttons Bar */
-.ig-actions-bar,
 .fb-actions-bar {
   padding: 8px 12px;
   display: grid;
@@ -2042,7 +1992,6 @@ img {
   gap: 4px;
 }
 
-.ig-action-btn,
 .fb-action-btn {
   background: transparent;
   border: none;
@@ -2059,53 +2008,27 @@ img {
   transition: all 0.2s ease;
 }
 
-.ig-action-btn:hover,
 .fb-action-btn:hover {
   background: rgba(255, 255, 255, 0.08);
   color: #fff;
 }
 
-.ig-action-btn.liked,
 .fb-action-btn.liked {
-  color: #e1306c;
-  background: rgba(225, 48, 108, 0.12);
+  color: var(--fire-orange);
+  background: rgba(234, 88, 12, 0.12);
 }
 
-.ig-action-btn.liked svg,
 .fb-action-btn.liked svg {
-  fill: #e1306c;
-  color: #e1306c;
+  fill: var(--fire-orange);
+  color: var(--fire-orange);
   transform: scale(1.15);
 }
 
-.ig-action-external,
 .fb-action-external {
   grid-column: 1 / -1;
   border-top: 1px solid rgba(255, 255, 255, 0.05);
   margin-top: 4px;
   padding-top: 6px;
-}
-
-.ig-direct-link-btn {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  padding: 8px;
-  font-size: 0.82rem;
-  font-weight: 700;
-  color: #f472b6;
-  background: linear-gradient(135deg, rgba(225, 48, 108, 0.12), rgba(240, 148, 51, 0.12));
-  border: 1px solid rgba(225, 48, 108, 0.3);
-  border-radius: 6px;
-  transition: all 0.2s ease;
-}
-
-.ig-direct-link-btn:hover {
-  background: linear-gradient(135deg, rgba(225, 48, 108, 0.25), rgba(240, 148, 51, 0.25));
-  color: #fbcfe8;
-  border-color: rgba(225, 48, 108, 0.6);
 }
 
 .fb-direct-link-btn {
@@ -2129,7 +2052,6 @@ img {
 }
 
 /* Mini Comment Box inside card */
-.ig-comment-box,
 .fb-comment-box {
   display: none;
   padding: 10px 18px 14px;
@@ -2137,18 +2059,15 @@ img {
   background: rgba(10, 10, 14, 0.5);
 }
 
-.ig-comment-box.open,
 .fb-comment-box.open {
   display: block;
 }
 
-.ig-comment-input-row,
 .fb-comment-input-row {
   display: flex;
   gap: 8px;
 }
 
-.ig-comment-input,
 .fb-comment-input {
   flex: 1;
   background: rgba(255, 255, 255, 0.06);
@@ -2160,14 +2079,12 @@ img {
   outline: none;
 }
 
-.ig-comment-input:focus,
 .fb-comment-input:focus {
-  border-color: #ec4899;
+  border-color: var(--fire-orange);
 }
 
-.ig-comment-submit-btn,
 .fb-comment-submit-btn {
-  background: linear-gradient(135deg, #e1306c, #ea580c);
+  background: var(--fire-orange);
   border: none;
   color: #fff;
   border-radius: var(--radius-full);
@@ -2177,7 +2094,6 @@ img {
   cursor: pointer;
 }
 
-.ig-card-comments-list,
 .fb-card-comments-list {
   margin-top: 8px;
   display: flex;
@@ -2187,7 +2103,6 @@ img {
   overflow-y: auto;
 }
 
-.ig-comment-bubble,
 .fb-comment-bubble {
   background: rgba(255, 255, 255, 0.05);
   border-radius: 12px;
@@ -2195,7 +2110,6 @@ img {
   font-size: 0.8rem;
 }
 
-.ig-comment-bubble strong,
 .fb-comment-bubble strong {
   color: var(--fire-amber);
   display: block;
@@ -2203,9 +2117,8 @@ img {
 }
 
 /* ==========================================================================
-   INSTAGRAM UPLOAD & SYNC STUDIO MODAL
+   FACEBOOK UPLOAD & SYNC STUDIO MODAL
    ========================================================================== */
-.ig-modal-backdrop,
 .fb-modal-backdrop {
   position: fixed;
   inset: 0;
@@ -2221,13 +2134,11 @@ img {
   padding: 20px;
 }
 
-.ig-modal-backdrop.open,
 .fb-modal-backdrop.open {
   opacity: 1;
   visibility: visible;
 }
 
-.ig-modal-dialog,
 .fb-modal-dialog {
   background: var(--bg-charcoal);
   border: 1px solid var(--border-fire);
@@ -2236,19 +2147,17 @@ img {
   max-width: 680px;
   max-height: 90vh;
   overflow-y: auto;
-  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.8), 0 0 40px rgba(225, 48, 108, 0.2);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.8), 0 0 40px rgba(234, 88, 12, 0.2);
   transform: translateY(20px) scale(0.96);
   transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   display: flex;
   flex-direction: column;
 }
 
-.ig-modal-backdrop.open .ig-modal-dialog,
 .fb-modal-backdrop.open .fb-modal-dialog {
   transform: translateY(0) scale(1);
 }
 
-.ig-modal-header,
 .fb-modal-header {
   padding: 20px 24px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
@@ -2258,14 +2167,12 @@ img {
   background: rgba(255, 255, 255, 0.02);
 }
 
-.ig-modal-header-title,
 .fb-modal-header-title {
   display: flex;
   align-items: center;
   gap: 10px;
 }
 
-.ig-modal-close,
 .fb-modal-close {
   background: transparent;
   border: none;
@@ -2279,13 +2186,11 @@ img {
   transition: all 0.2s ease;
 }
 
-.ig-modal-close:hover,
 .fb-modal-close:hover {
   background: rgba(255, 255, 255, 0.1);
   color: #fff;
 }
 
-.ig-modal-tabs,
 .fb-modal-tabs {
   display: flex;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
@@ -2293,7 +2198,6 @@ img {
   background: rgba(0, 0, 0, 0.2);
 }
 
-.ig-modal-tab-btn,
 .fb-modal-tab-btn {
   background: transparent;
   border: none;
@@ -2306,38 +2210,33 @@ img {
   transition: all 0.2s ease;
 }
 
-.ig-modal-tab-btn.active,
 .fb-modal-tab-btn.active {
   color: var(--fire-amber);
-  border-bottom-color: #e1306c;
+  border-bottom-color: var(--fire-orange);
 }
 
-.ig-modal-body,
 .fb-modal-body {
   padding: 24px;
 }
 
 /* Drag-and-drop Image Upload Zone */
-.ig-dropzone,
 .fb-dropzone {
-  border: 2px dashed rgba(225, 48, 108, 0.4);
+  border: 2px dashed rgba(234, 88, 12, 0.4);
   border-radius: var(--radius-md);
   padding: 24px;
   text-align: center;
-  background: rgba(225, 48, 108, 0.04);
+  background: rgba(234, 88, 12, 0.04);
   cursor: pointer;
   transition: all 0.25s ease;
   margin-bottom: 16px;
   position: relative;
 }
 
-.ig-dropzone:hover, .ig-dropzone.dragover,
 .fb-dropzone:hover, .fb-dropzone.dragover {
-  border-color: #ec4899;
-  background: rgba(225, 48, 108, 0.09);
+  border-color: var(--fire-amber);
+  background: rgba(234, 88, 12, 0.08);
 }
 
-.ig-dropzone input[type="file"],
 .fb-dropzone input[type="file"] {
   position: absolute;
   inset: 0;
@@ -2347,7 +2246,6 @@ img {
   height: 100%;
 }
 
-.ig-dropzone-preview,
 .fb-dropzone-preview {
   max-height: 180px;
   border-radius: var(--radius-sm);
@@ -2357,7 +2255,6 @@ img {
   border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
-.ig-dropzone-preview.has-image,
 .fb-dropzone-preview.has-image {
   display: inline-block;
 }
