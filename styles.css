@@ -540,56 +540,11 @@ img {
   pointer-events: none;
 }
 
-/* Background Watermark: African Royal Shield & Spears */
-.royal-shield-watermark {
-  position: absolute;
-  right: -8px;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 140px;
-  height: 140px;
-  opacity: 0.12;
-  pointer-events: none;
-  transition: opacity 0.4s ease, transform 0.4s ease;
-  z-index: 1;
-}
-
-.hero-royal-title-container:hover .royal-shield-watermark {
-  opacity: 0.22;
-  transform: translateY(-50%) scale(1.04);
-}
-
 .hero-royal-crest-line {
   display: flex;
   align-items: center;
   gap: 12px;
   margin-bottom: 5px;
-  position: relative;
-  z-index: 2;
-}
-
-/* African Royal Shield & Crossed Spears Crest */
-.royal-african-shield-crest {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 44px;
-  height: 44px;
-  flex-shrink: 0;
-  filter: drop-shadow(0 0 12px rgba(245, 158, 11, 0.65));
-  animation: floatSubtle 3s ease-in-out infinite;
-  transition: transform 0.3s ease, filter 0.3s ease;
-}
-
-.hero-royal-title-container:hover .royal-african-shield-crest {
-  transform: scale(1.08);
-  filter: drop-shadow(0 0 16px rgba(245, 158, 11, 0.85));
-}
-
-.royal-african-shield-crest svg {
-  width: 100%;
-  height: 100%;
-  display: block;
 }
 
 .royal-crown-emblem {
@@ -632,8 +587,6 @@ img {
   letter-spacing: 0.5px;
   margin-bottom: 6px;
   flex-wrap: wrap;
-  position: relative;
-  z-index: 2;
 }
 
 .royal-meaning-highlight {
@@ -657,32 +610,6 @@ img {
   font-size: 0.82rem;
   letter-spacing: 1.4px;
   font-weight: 800;
-}
-
-/* African Royalty Regalia Tag (Shield & Spear) */
-.royal-african-regalia-tag {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  background: linear-gradient(135deg, rgba(245, 158, 11, 0.2) 0%, rgba(234, 88, 12, 0.15) 100%);
-  border: 1px solid rgba(245, 158, 11, 0.45);
-  color: #fef08a;
-  font-size: 0.74rem;
-  font-weight: 800;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  padding: 3px 10px;
-  border-radius: var(--radius-full);
-  box-shadow: 0 0 12px rgba(245, 158, 11, 0.15);
-  white-space: nowrap;
-  transition: all 0.25s ease;
-}
-
-.royal-african-regalia-tag:hover {
-  background: linear-gradient(135deg, rgba(245, 158, 11, 0.3) 0%, rgba(234, 88, 12, 0.25) 100%);
-  border-color: #f59e0b;
-  box-shadow: 0 0 16px rgba(245, 158, 11, 0.3);
-  transform: translateY(-1px);
 }
 
 .hero-royal-caption {
@@ -1855,13 +1782,6 @@ img {
   .ig-posts-grid,
   .fb-posts-grid {
     grid-template-columns: 1fr;
-  }
-  .royal-african-shield-crest {
-    width: 36px;
-    height: 36px;
-  }
-  .hero-royal-crest-line {
-    gap: 8px;
   }
 }
 
