@@ -6,7 +6,6 @@
 
 document.addEventListener('DOMContentLoaded', () => {
   initImageFallbacks();
-  initLionHologram();
   initEmberCanvas();
   initNavigation();
   initAudioPlayer();
@@ -14,7 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initVipPassGenerator();
   initContactForm();
   initInteractiveToasts();
-  initFacebookFeed();
+  initInstagramFeed();
 });
 
 /* ==========================================================================
@@ -37,945 +36,7 @@ function initImageFallbacks() {
 }
 
 /* ==========================================================================
-   2. Royal Roaring Lion Motion Hologram (Theme: "Bomb Fire" / MGM Lion Intro)
-      - Majestic sitting lion making its sovereign royal presence known.
-      - Iconic Metro-Goldwyn-Mayer inspired concentric filmstrip laurel arch with royal crown.
-      - Articulated roaring lower jaw with glowing molten fiery gullet and saber fangs.
-      - Living flame mane billowing with sinusoidal thermal updrafts.
-      - Piercing golden laser eyes surveying the kingdom.
-      - Concentric sonic roar soundwaves blasting across the background during roars.
-      - Digital hologram scanlines, chromatic laser glow, and perspective floor grid.
-      - Interactive: Roars on demand upon clicks, taps, scrolls, or badge toggle.
-   ========================================================================== */
-function initLionHologram() {
-  let canvas = document.getElementById('lion-hologram-canvas');
-  if (!canvas) {
-    canvas = document.createElement('canvas');
-    canvas.id = 'lion-hologram-canvas';
-    const emberCanvas = document.getElementById('ember-canvas');
-    if (emberCanvas && emberCanvas.parentNode) {
-      emberCanvas.parentNode.insertBefore(canvas, emberCanvas);
-    } else {
-      document.body.insertBefore(canvas, document.body.firstChild);
-    }
-  }
-
-  const ctx = canvas.getContext('2d');
-  let width = (canvas.width = window.innerWidth);
-  let height = (canvas.height = window.innerHeight);
-
-  // Hologram state engine
-  let time = 0;
-  let currentRoar = 0;   // 0 (closed/sentry) to 1.0 (wide roar)
-  let targetRoar = 0;
-  let roarOverrideTimer = 0;
-  let cursorX = width * 0.5;
-  let cursorY = height * 0.5;
-  let lastScrollY = window.scrollY || 0;
-
-  // Active sonic soundwave rings emitted during roars
-  const sonicWaves = [];
-  // Ambient holographic floating energy nodes
-  const holoParticles = [];
-
-  const isMobileInitial = width < 768;
-  for (let i = 0; i < (isMobileInitial ? 18 : 35); i++) {
-    holoParticles.push({
-      x: Math.random() * width,
-      y: Math.random() * height,
-      size: Math.random() * 2 + 1,
-      speedY: Math.random() * 1.5 + 0.5,
-      alpha: Math.random() * 0.6 + 0.2,
-      pulse: Math.random() * Math.PI * 2
-    });
-  }
-
-  window.addEventListener('resize', () => {
-    width = canvas.width = window.innerWidth;
-    height = canvas.height = window.innerHeight;
-  });
-
-  window.addEventListener('mousemove', (e) => {
-    cursorX = e.clientX;
-    cursorY = e.clientY;
-  });
-
-  function triggerRoar(duration = 120) {
-    roarOverrideTimer = Math.max(roarOverrideTimer, duration);
-    targetRoar = 1.0;
-  }
-
-  // Synthesized cinematic sub-bass lion roar rumble on user interaction
-  let audioCtx = null;
-  function playRoarAudioSynth() {
-    try {
-      const AudioContextClass = window.AudioContext || window.webkitAudioContext;
-      if (!AudioContextClass) return;
-      if (!audioCtx) audioCtx = new AudioContextClass();
-      if (audioCtx.state === 'suspended') audioCtx.resume();
-
-      const now = audioCtx.currentTime;
-      const osc = audioCtx.createOscillator();
-      const gain = audioCtx.createGain();
-      const filter = audioCtx.createBiquadFilter();
-
-      // Deep, chest-resonating feline growl frequency
-      osc.type = 'sawtooth';
-      osc.frequency.setValueAtTime(80, now);
-      osc.frequency.exponentialRampToValueAtTime(42, now + 1.2);
-      osc.frequency.exponentialRampToValueAtTime(32, now + 2.0);
-
-      // Low-pass filter for thunderous acoustic weight
-      filter.type = 'lowpass';
-      filter.frequency.setValueAtTime(160, now);
-      filter.frequency.exponentialRampToValueAtTime(90, now + 1.8);
-
-      // Controlled subtle volume envelope
-      gain.gain.setValueAtTime(0.001, now);
-      gain.gain.linearRampToValueAtTime(0.12, now + 0.2);
-      gain.gain.exponentialRampToValueAtTime(0.001, now + 2.1);
-
-      osc.connect(filter);
-      filter.connect(gain);
-      gain.connect(audioCtx.destination);
-
-      osc.start(now);
-      osc.stop(now + 2.2);
-    } catch (e) {
-      // Audio synth optional
-    }
-  }
-
-  // Window interaction triggers
-  window.addEventListener('pointerdown', (e) => {
-    const tag = (e.target && e.target.tagName) ? e.target.tagName.toLowerCase() : '';
-    if (tag === 'input' || tag === 'textarea') return;
-    triggerRoar(110);
-  });
-
-  window.addEventListener('scroll', () => {
-    const nowY = window.scrollY || 0;
-    const delta = Math.abs(nowY - lastScrollY);
-    lastScrollY = nowY;
-    if (delta > 2) {
-      triggerRoar(Math.min(90, Math.floor(delta * 2.2 + 35)));
-    }
-  }, { passive: true });
-
-  // Optional badge click trigger
-  document.addEventListener('click', (e) => {
-    const trigger = e.target.closest('#holo-lion-trigger');
-    if (trigger) {
-      triggerRoar(140);
-      playRoarAudioSynth();
-    }
-  });
-
-  function spawnSonicWave(sourceX, sourceY) {
-    if (sonicWaves.length < 18) {
-      sonicWaves.push({
-        x: sourceX,
-        y: sourceY,
-        r: 12,
-        maxR: Math.min(width, 420),
-        alpha: 0.95,
-        speed: 5.5,
-        lineWidth: 2.5
-      });
-    }
-  }
-
-  // Main Render Loop
-  function render() {
-    time++;
-
-    // MGM Lion Choreography State Machine (approx 9 second cycle)
-    const cycle = time % 540;
-    let headPitch = 0; // tilt up/down
-    let headYaw = 0;   // turn left/right
-    let breathOffset = Math.sin(time * 0.04) * 3;
-
-    if (roarOverrideTimer > 0) {
-      roarOverrideTimer--;
-      targetRoar = 1.0;
-      headPitch = -0.15 + Math.sin(time * 0.35) * 0.04;
-      headYaw = (cursorX / width - 0.5) * 0.12;
-      breathOffset = 6;
-    } else {
-      if (cycle < 180) {
-        // Phase 0: Regal Sentry Gaze (3.0s)
-        targetRoar = 0.0;
-        headPitch = 0.0;
-        headYaw = Math.sin(time * 0.02) * 0.08 + (cursorX / width - 0.5) * 0.06;
-      } else if (cycle < 225) {
-        // Phase 1: Inhale & Tension Build (0.75s)
-        targetRoar = 0.15;
-        headPitch = -0.12;
-        headYaw = -0.04;
-        breathOffset = 5;
-      } else if (cycle < 330) {
-        // Phase 2: FIRST MIGHTY ROAR - MGM ROAR 1 (1.75s)
-        targetRoar = 1.0;
-        headPitch = -0.16 + Math.sin(time * 0.3) * 0.03;
-        headYaw = -0.06;
-      } else if (cycle < 375) {
-        // Phase 3: Breath Draw / Regroup (0.75s)
-        targetRoar = 0.22;
-        headPitch = -0.06;
-        headYaw = 0.02;
-      } else if (cycle < 485) {
-        // Phase 4: SECOND DEEP ROAR - MGM ROAR 2 (1.8s)
-        targetRoar = 1.0;
-        headPitch = -0.18 + Math.sin(time * 0.38) * 0.04;
-        headYaw = 0.05;
-      } else {
-        // Phase 5: Regal Settle (0.9s)
-        targetRoar = 0.0;
-        headPitch = 0.0;
-        headYaw = 0.0;
-      }
-    }
-
-    // Smooth lerp of roar intensity
-    currentRoar += (targetRoar - currentRoar) * 0.09;
-
-    ctx.clearRect(0, 0, width, height);
-
-    // Responsive Placement: Center-right on desktop, centered on mobile
-    const isMobile = width < 860;
-    const isTablet = width >= 860 && width < 1200;
-    const lionX = isMobile ? width * 0.5 : width * 0.60;
-    const lionY = isMobile ? height * 0.46 : height * 0.50;
-    const lionScale = isMobile ? Math.min(width / 460, 0.70) : (isTablet ? 0.82 : Math.min(width / 1180, 1.05));
-
-    // Spawn sonic waves from lion mouth during active roar
-    if (currentRoar > 0.45 && time % 11 === 0) {
-      const mouthWorldX = lionX;
-      const mouthWorldY = lionY + (headPitch * 30 + 15) * lionScale;
-      spawnSonicWave(mouthWorldX, mouthWorldY);
-    }
-
-    // 1. Draw Sonic Waves
-    for (let i = sonicWaves.length - 1; i >= 0; i--) {
-      const wave = sonicWaves[i];
-      wave.r += wave.speed;
-      wave.alpha = Math.max(0, 1 - (wave.r / wave.maxR));
-
-      if (wave.alpha <= 0 || wave.r >= wave.maxR) {
-        sonicWaves.splice(i, 1);
-        continue;
-      }
-
-      ctx.save();
-      ctx.beginPath();
-      ctx.arc(wave.x, wave.y, wave.r, 0, Math.PI * 2);
-      ctx.strokeStyle = `rgba(251, 191, 36, ${wave.alpha * 0.65})`;
-      ctx.lineWidth = wave.lineWidth * (1 + currentRoar * 0.5);
-      ctx.shadowBlur = 14;
-      ctx.shadowColor = '#ea580c';
-      ctx.setLineDash([12, 6]);
-      ctx.stroke();
-      ctx.restore();
-    }
-
-    // 2. Draw Floating Hologram Energy Nodes
-    ctx.save();
-    for (const p of holoParticles) {
-      p.y -= p.speedY;
-      if (p.y < -20) p.y = height + 20;
-      p.pulse += 0.04;
-      const alpha = (Math.sin(p.pulse) * 0.25 + 0.45) * p.alpha;
-      ctx.fillStyle = `rgba(251, 191, 36, ${alpha})`;
-      ctx.beginPath();
-      ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-      ctx.fill();
-    }
-    ctx.restore();
-
-    // 3. Draw Main Lion Hologram
-    ctx.save();
-    ctx.translate(lionX, lionY);
-    ctx.scale(lionScale, lionScale);
-
-    // Global hologram screen blending
-    ctx.globalCompositeOperation = 'screen';
-
-    // A. Holographic Pedestal / Ground Matrix
-    drawHologramPedestal(ctx, time);
-
-    // B. MGM Arched Laurel Crest & Sovereign Crown
-    drawMGMArchedCrest(ctx, time, currentRoar);
-
-    // C. Sitting Lion Body, Hindquarters & Forelegs
-    drawSittingLionBody(ctx, breathOffset, currentRoar, time);
-
-    // D. Fiery Lion Mane (Undulating Flame Locks)
-    drawFieryMane(ctx, time, currentRoar, headPitch, headYaw);
-
-    // E. Lion Head with Articulated Roaring Jaw & Saber Fangs
-    drawArticulatedLionHead(ctx, time, currentRoar, headPitch, headYaw);
-
-    // F. Holographic Scanline & Glitch Sweep Overlay
-    drawHologramScanlines(ctx, time);
-
-    ctx.restore();
-
-    requestAnimationFrame(render);
-  }
-
-  // --- Sub-renderer: Hologram Ground Matrix ---
-  function drawHologramPedestal(ctx, time) {
-    ctx.save();
-    const groundY = 215;
-    ctx.strokeStyle = 'rgba(245, 158, 11, 0.22)';
-    ctx.lineWidth = 1;
-
-    // Concentric perspective rings
-    for (let r = 80; r <= 260; r += 45) {
-      ctx.beginPath();
-      ctx.ellipse(0, groundY, r, r * 0.32, 0, 0, Math.PI * 2);
-      ctx.stroke();
-    }
-
-    // Radiating floor coordinates
-    for (let a = -Math.PI * 0.75; a <= -Math.PI * 0.25; a += Math.PI / 8) {
-      ctx.beginPath();
-      ctx.moveTo(0, groundY);
-      ctx.lineTo(Math.cos(a) * 290, groundY - Math.sin(a) * 90);
-      ctx.stroke();
-    }
-    ctx.restore();
-  }
-
-  // --- Sub-renderer: MGM Arched Laurel Ribbon Crest ---
-  function drawMGMArchedCrest(ctx, time, roar) {
-    ctx.save();
-    const centerY = -18;
-    const archRadius = 210;
-
-    // 1. Outer Tech-Gear Track with rotating ticks
-    ctx.save();
-    ctx.translate(0, centerY);
-    ctx.rotate(time * 0.0015);
-    ctx.strokeStyle = 'rgba(251, 191, 36, 0.35)';
-    ctx.lineWidth = 1.5;
-    ctx.beginPath();
-    ctx.arc(0, 0, archRadius + 14, 0, Math.PI * 2);
-    ctx.stroke();
-
-    // 36 radial coordinate tick marks
-    for (let i = 0; i < 36; i++) {
-      const angle = (i * Math.PI) / 18;
-      const isMajor = i % 3 === 0;
-      const inner = archRadius + 14;
-      const outer = inner + (isMajor ? 8 : 4);
-      ctx.beginPath();
-      ctx.moveTo(Math.cos(angle) * inner, Math.sin(angle) * inner);
-      ctx.lineTo(Math.cos(angle) * outer, Math.sin(angle) * outer);
-      ctx.strokeStyle = isMajor ? 'rgba(254, 240, 138, 0.6)' : 'rgba(245, 158, 11, 0.25)';
-      ctx.stroke();
-    }
-    ctx.restore();
-
-    // 2. MGM Filmstrip Ribbon Track
-    ctx.save();
-    ctx.translate(0, centerY);
-    ctx.beginPath();
-    ctx.arc(0, 0, archRadius, 0, Math.PI * 2);
-    ctx.strokeStyle = 'rgba(245, 158, 11, 0.45)';
-    ctx.lineWidth = 14;
-    ctx.stroke();
-
-    // Filmstrip sprocket apertures
-    const sprocketCount = 28;
-    ctx.fillStyle = 'rgba(8, 8, 10, 0.9)';
-    for (let i = 0; i < sprocketCount; i++) {
-      const a = (i * Math.PI * 2) / sprocketCount + time * 0.001;
-      ctx.save();
-      ctx.rotate(a);
-      ctx.translate(archRadius, 0);
-      ctx.fillRect(-3, -4, 6, 8);
-      ctx.strokeStyle = 'rgba(251, 191, 36, 0.5)';
-      ctx.lineWidth = 0.8;
-      ctx.strokeRect(-3, -4, 6, 8);
-      ctx.restore();
-    }
-    ctx.restore();
-
-    // 3. Flanking Golden Laurel Leaves (Left and Right)
-    drawLaurelWreathBranch(ctx, centerY, archRadius + 24, -1);
-    drawLaurelWreathBranch(ctx, centerY, archRadius + 24, 1);
-
-    // 4. Sovereign Royal Crown at Apex
-    drawSovereignApexCrown(ctx, centerY - archRadius - 8, time, roar);
-
-    // 5. Arched Royal Ribbon Wordmark
-    ctx.save();
-    ctx.font = 'bold 11px "Cinzel", Georgia, serif';
-    ctx.fillStyle = 'rgba(254, 240, 138, 0.85)';
-    ctx.textAlign = 'center';
-    ctx.letterSpacing = '3px';
-    ctx.shadowBlur = 8;
-    ctx.shadowColor = '#f59e0b';
-    ctx.fillText('★ MFUMUKAZI • SOVEREIGN ROAR ★', 0, centerY + archRadius + 28);
-    ctx.restore();
-
-    ctx.restore();
-  }
-
-  function drawLaurelWreathBranch(ctx, centerY, radius, side) {
-    ctx.save();
-    ctx.translate(0, centerY);
-    const leafCount = 8;
-    for (let i = 0; i < leafCount; i++) {
-      const a = -Math.PI * 0.5 + (side * (0.25 + (i * 0.16)));
-      const x = Math.cos(a) * radius;
-      const y = Math.sin(a) * radius;
-      ctx.save();
-      ctx.translate(x, y);
-      ctx.rotate(a + (side * Math.PI * 0.5));
-      ctx.beginPath();
-      ctx.ellipse(0, 0, 10, 4.5, 0, 0, Math.PI * 2);
-      ctx.fillStyle = 'rgba(251, 191, 36, 0.4)';
-      ctx.fill();
-      ctx.strokeStyle = 'rgba(254, 240, 138, 0.7)';
-      ctx.lineWidth = 1;
-      ctx.stroke();
-      ctx.restore();
-    }
-    ctx.restore();
-  }
-
-  function drawSovereignApexCrown(ctx, y, time, roar) {
-    ctx.save();
-    ctx.translate(0, y);
-    const glow = 10 + roar * 14;
-    ctx.shadowBlur = glow;
-    ctx.shadowColor = '#fbbf24';
-
-    // 5-Point Sovereign Crown
-    ctx.beginPath();
-    ctx.moveTo(-32, 10);
-    ctx.lineTo(-28, -8);  // peak 1
-    ctx.lineTo(-16, 2);
-    ctx.lineTo(-12, -18); // peak 2
-    ctx.lineTo(0, -2);
-    ctx.lineTo(0, -26);   // center peak (highest)
-    ctx.lineTo(0, -2);
-    ctx.lineTo(12, -18);  // peak 4
-    ctx.lineTo(16, 2);
-    ctx.lineTo(28, -8);   // peak 5
-    ctx.lineTo(32, 10);
-    ctx.closePath();
-
-    ctx.fillStyle = 'rgba(251, 191, 36, 0.45)';
-    ctx.fill();
-    ctx.strokeStyle = '#fef08a';
-    ctx.lineWidth = 2;
-    ctx.stroke();
-
-    // Crown Base Arch & Gems
-    ctx.beginPath();
-    ctx.ellipse(0, 10, 32, 5, 0, 0, Math.PI * 2);
-    ctx.strokeStyle = '#fbbf24';
-    ctx.lineWidth = 2;
-    ctx.stroke();
-
-    // Center Cross Star
-    ctx.beginPath();
-    ctx.arc(0, -26, 3, 0, Math.PI * 2);
-    ctx.fillStyle = '#ffffff';
-    ctx.fill();
-
-    ctx.restore();
-  }
-
-  // --- Sub-renderer: Sitting Lion Body ---
-  function drawSittingLionBody(ctx, breathOffset, roar, time) {
-    ctx.save();
-    const groundY = 215;
-
-    // Muscular Sitting Hindquarters
-    ctx.strokeStyle = 'rgba(245, 158, 11, 0.55)';
-    ctx.lineWidth = 2;
-    ctx.shadowBlur = 8;
-    ctx.shadowColor = '#ea580c';
-
-    // Left Haunch (Flank)
-    ctx.beginPath();
-    ctx.moveTo(-50, 75);
-    ctx.bezierCurveTo(-110, 85, -165, 135, -145, groundY);
-    ctx.lineTo(-95, groundY);
-    ctx.bezierCurveTo(-115, 160, -95, 110, -50, 95);
-    ctx.fillStyle = 'rgba(234, 88, 12, 0.12)';
-    ctx.fill();
-    ctx.stroke();
-
-    // Right Haunch (Flank)
-    ctx.beginPath();
-    ctx.moveTo(50, 75);
-    ctx.bezierCurveTo(110, 85, 165, 135, 145, groundY);
-    ctx.lineTo(95, groundY);
-    ctx.bezierCurveTo(115, 160, 95, 110, 50, 95);
-    ctx.fillStyle = 'rgba(234, 88, 12, 0.12)';
-    ctx.fill();
-    ctx.stroke();
-
-    // Swishing Tail with Flame Tuft
-    const tailWag = Math.sin(time * 0.05) * 12;
-    ctx.beginPath();
-    ctx.moveTo(-135, 185);
-    ctx.bezierCurveTo(-170, 175, -200 + tailWag, 150, -185 + tailWag, 105);
-    ctx.strokeStyle = 'rgba(251, 191, 36, 0.65)';
-    ctx.lineWidth = 3.5;
-    ctx.stroke();
-
-    // Flame Tuft at Tail Tip
-    ctx.save();
-    ctx.translate(-185 + tailWag, 105);
-    ctx.rotate(Math.sin(time * 0.08) * 0.2);
-    ctx.beginPath();
-    ctx.moveTo(0, 0);
-    ctx.bezierCurveTo(-10, -15, -6, -26, 0, -32);
-    ctx.bezierCurveTo(6, -26, 10, -15, 0, 0);
-    ctx.fillStyle = 'rgba(234, 88, 12, 0.85)';
-    ctx.fill();
-    ctx.strokeStyle = '#fef08a';
-    ctx.lineWidth = 1.5;
-    ctx.stroke();
-    ctx.restore();
-
-    // Powerful Upright Forelegs
-    drawForeleg(ctx, -48, 55, -52, groundY);
-    drawForeleg(ctx, 48, 55, 52, groundY);
-
-    // Muscular Chest / Pectorals (Breathing expansion)
-    ctx.beginPath();
-    ctx.moveTo(-35, 60);
-    ctx.bezierCurveTo(-20, 130 + breathOffset, 20, 130 + breathOffset, 35, 60);
-    ctx.strokeStyle = 'rgba(254, 240, 138, 0.4)';
-    ctx.lineWidth = 1.8;
-    ctx.stroke();
-
-    // Center Sternum Crest Line
-    ctx.beginPath();
-    ctx.moveTo(0, 50);
-    ctx.lineTo(0, 140 + breathOffset);
-    ctx.strokeStyle = 'rgba(245, 158, 11, 0.35)';
-    ctx.lineWidth = 1.2;
-    ctx.stroke();
-
-    ctx.restore();
-  }
-
-  function drawForeleg(ctx, topX, topY, footX, footY) {
-    ctx.save();
-    ctx.beginPath();
-    ctx.moveTo(topX - 14, topY);
-    ctx.lineTo(footX - 16, footY - 14);
-    // Paw wrist
-    ctx.lineTo(footX - 22, footY);
-    // 4 Paws toes
-    ctx.lineTo(footX - 11, footY + 2);
-    ctx.lineTo(footX, footY + 2);
-    ctx.lineTo(footX + 11, footY + 2);
-    ctx.lineTo(footX + 22, footY);
-    ctx.lineTo(footX + 16, footY - 14);
-    ctx.lineTo(topX + 14, topY);
-    ctx.closePath();
-
-    ctx.fillStyle = 'rgba(18, 17, 24, 0.65)';
-    ctx.fill();
-    ctx.strokeStyle = 'rgba(251, 191, 36, 0.7)';
-    ctx.lineWidth = 2;
-    ctx.stroke();
-
-    // Toe separation claws
-    ctx.strokeStyle = 'rgba(254, 240, 138, 0.8)';
-    ctx.lineWidth = 1.5;
-    for (let offset of [-11, 0, 11]) {
-      ctx.beginPath();
-      ctx.moveTo(footX + offset, footY - 6);
-      ctx.lineTo(footX + offset, footY + 2);
-      ctx.stroke();
-    }
-    ctx.restore();
-  }
-
-  // --- Sub-renderer: Fiery Mane of Living Flames ---
-  function drawFieryMane(ctx, time, roar, headPitch, headYaw) {
-    ctx.save();
-    ctx.translate(headYaw * 30, headPitch * 30);
-
-    const flameLocksCount = 32;
-    const baseRadius = 60;
-    const flareExpansion = 1 + roar * 0.28;
-
-    // Layer 1: Deep Crimson / Shadow Flame Base
-    ctx.save();
-    ctx.beginPath();
-    for (let i = 0; i < flameLocksCount; i++) {
-      const angle = (i * Math.PI * 2) / flameLocksCount;
-      const wave = Math.sin(time * 0.05 + i * 0.4) * (8 + roar * 16);
-      const lockLen = (baseRadius + 65 + wave) * flareExpansion;
-      const lx = Math.cos(angle) * lockLen;
-      const ly = Math.sin(angle) * (lockLen * 1.05) + 10;
-      if (i === 0) ctx.moveTo(lx, ly);
-      else ctx.lineTo(lx, ly);
-    }
-    ctx.closePath();
-    ctx.fillStyle = 'rgba(185, 28, 28, 0.18)';
-    ctx.fill();
-    ctx.strokeStyle = 'rgba(234, 88, 12, 0.35)';
-    ctx.lineWidth = 3;
-    ctx.stroke();
-    ctx.restore();
-
-    // Layer 2: Molten Amber Flame Locks
-    ctx.save();
-    ctx.strokeStyle = 'rgba(245, 158, 11, 0.75)';
-    ctx.lineWidth = 2;
-    ctx.shadowBlur = 10 + roar * 10;
-    ctx.shadowColor = '#ea580c';
-
-    for (let i = 0; i < flameLocksCount; i++) {
-      const angle = (i * Math.PI * 2) / flameLocksCount;
-      // Skip bottom chin opening where beard is
-      if (angle > Math.PI * 0.38 && angle < Math.PI * 0.62) continue;
-
-      const wave = Math.sin(time * 0.06 + i * 0.5) * (10 + roar * 18);
-      const outerR = (baseRadius + 50 + wave) * flareExpansion;
-      const startX = Math.cos(angle) * baseRadius;
-      const startY = Math.sin(angle) * baseRadius + 10;
-      const tipX = Math.cos(angle) * outerR;
-      const tipY = Math.sin(angle) * outerR + 10;
-
-      const cpx = Math.cos(angle + 0.15) * (outerR * 0.7);
-      const cpy = Math.sin(angle + 0.15) * (outerR * 0.7) + 10;
-
-      ctx.beginPath();
-      ctx.moveTo(startX, startY);
-      ctx.quadraticCurveTo(cpx, cpy, tipX, tipY);
-      ctx.stroke();
-    }
-    ctx.restore();
-
-    // Layer 3: Incandescent Yellow Core Flame Curls
-    ctx.save();
-    ctx.strokeStyle = 'rgba(254, 240, 138, 0.85)';
-    ctx.lineWidth = 1.5;
-    ctx.shadowBlur = 6;
-    ctx.shadowColor = '#fbbf24';
-
-    for (let i = 0; i < flameLocksCount; i += 2) {
-      const angle = (i * Math.PI * 2) / flameLocksCount;
-      if (angle > Math.PI * 0.38 && angle < Math.PI * 0.62) continue;
-
-      const wave = Math.sin(time * 0.08 + i * 0.6) * (6 + roar * 12);
-      const outerR = (baseRadius + 28 + wave) * flareExpansion;
-      const startX = Math.cos(angle) * (baseRadius * 0.8);
-      const startY = Math.sin(angle) * (baseRadius * 0.8) + 10;
-      const tipX = Math.cos(angle) * outerR;
-      const tipY = Math.sin(angle) * outerR + 10;
-
-      ctx.beginPath();
-      ctx.moveTo(startX, startY);
-      ctx.lineTo(tipX, tipY);
-      ctx.stroke();
-    }
-    ctx.restore();
-
-    ctx.restore();
-  }
-
-  // --- Sub-renderer: Articulated Lion Head & Roaring Jaws ---
-  function drawArticulatedLionHead(ctx, time, roar, headPitch, headYaw) {
-    ctx.save();
-    ctx.translate(headYaw * 30, headPitch * 30);
-
-    // 1. Lion Ears (pin back when roaring)
-    const earPin = roar * 0.18;
-    drawLionEar(ctx, -56, -64, -1, earPin);
-    drawLionEar(ctx, 56, -64, 1, earPin);
-
-    // 2. Cranium & Forehead Brow Ridge
-    ctx.save();
-    ctx.beginPath();
-    ctx.moveTo(-45, -55);
-    ctx.bezierCurveTo(-25, -78, 25, -78, 45, -55);
-    ctx.lineTo(38, -25);
-    ctx.lineTo(-38, -25);
-    ctx.closePath();
-    ctx.fillStyle = 'rgba(20, 18, 26, 0.9)';
-    ctx.fill();
-    ctx.strokeStyle = 'rgba(251, 191, 36, 0.85)';
-    ctx.lineWidth = 2.2;
-    ctx.stroke();
-
-    // Forehead furrow battle marks
-    ctx.strokeStyle = 'rgba(245, 158, 11, 0.6)';
-    ctx.lineWidth = 1.5;
-    ctx.beginPath();
-    ctx.moveTo(-14, -58);
-    ctx.lineTo(-6, -32);
-    ctx.moveTo(14, -58);
-    ctx.lineTo(6, -32);
-    ctx.moveTo(0, -62);
-    ctx.lineTo(0, -28);
-    ctx.stroke();
-    ctx.restore();
-
-    // 3. Piercing Laser Eyes (Almond feline shape, glowing molten gold)
-    drawFelineEye(ctx, -26, -28, -1, roar);
-    drawFelineEye(ctx, 26, -28, 1, roar);
-
-    // 4. Snout Bridge & Whisker Pads
-    ctx.save();
-    // Nose bridge
-    ctx.beginPath();
-    ctx.moveTo(-12, -24);
-    ctx.lineTo(-14, 0);
-    ctx.lineTo(14, 0);
-    ctx.lineTo(12, -24);
-    ctx.strokeStyle = 'rgba(251, 191, 36, 0.6)';
-    ctx.lineWidth = 1.6;
-    ctx.stroke();
-
-    // Dark Feline Nose Pad
-    ctx.beginPath();
-    ctx.moveTo(-16, 0);
-    ctx.lineTo(16, 0);
-    ctx.lineTo(0, 14);
-    ctx.closePath();
-    ctx.fillStyle = 'rgba(234, 88, 12, 0.9)';
-    ctx.fill();
-    ctx.strokeStyle = '#fef08a';
-    ctx.lineWidth = 1.5;
-    ctx.stroke();
-
-    // Whisker pads (cheeks)
-    ctx.beginPath();
-    ctx.arc(-22, 10, 12, 0, Math.PI * 2);
-    ctx.arc(22, 10, 12, 0, Math.PI * 2);
-    ctx.strokeStyle = 'rgba(245, 158, 11, 0.45)';
-    ctx.lineWidth = 1.2;
-    ctx.stroke();
-
-    // Whisker filaments (vibrating with roar)
-    const whiskerVibe = Math.sin(time * 0.4) * (2 * roar);
-    ctx.strokeStyle = 'rgba(254, 240, 138, 0.7)';
-    ctx.lineWidth = 1;
-    for (let s of [-1, 1]) {
-      for (let w = -1; w <= 1; w++) {
-        ctx.beginPath();
-        ctx.moveTo(s * 18, 10 + w * 4);
-        ctx.lineTo(s * (65 + Math.abs(w) * 6), 12 + w * 10 + whiskerVibe);
-        ctx.stroke();
-      }
-    }
-    ctx.restore();
-
-    // 5. Upper Jaw & Ferocious Saber Canine Fangs
-    ctx.save();
-    ctx.beginPath();
-    ctx.moveTo(-28, 14);
-    ctx.bezierCurveTo(-14, 18, 14, 18, 28, 14);
-    ctx.strokeStyle = '#fbbf24';
-    ctx.lineWidth = 2.4;
-    ctx.stroke();
-
-    // Upper Saber Canines (Left and Right)
-    drawSaberFang(ctx, -22, 16, 26, 1);
-    drawSaberFang(ctx, 22, 16, 26, 1);
-
-    // Upper Incisors
-    ctx.fillStyle = '#ffffff';
-    for (let inc = -12; inc <= 12; inc += 6) {
-      ctx.fillRect(inc - 1.5, 16, 3, 5);
-    }
-    ctx.restore();
-
-    // 6. Articulated Lower Jaw (Pivots downward with roar)
-    const jawDrop = roar * 34; // drops up to 34px open!
-    ctx.save();
-    ctx.translate(0, jawDrop);
-
-    // Mouth Cavern: Deep molten fiery glow when opened!
-    if (roar > 0.08) {
-      ctx.save();
-      const mouthGrad = ctx.createRadialGradient(0, 18 - jawDrop * 0.5, 4, 0, 18 - jawDrop * 0.5, 40);
-      mouthGrad.addColorStop(0, `rgba(255, 255, 240, ${roar * 0.95})`);
-      mouthGrad.addColorStop(0.3, `rgba(245, 158, 11, ${roar * 0.85})`);
-      mouthGrad.addColorStop(0.7, `rgba(220, 38, 38, ${roar * 0.7})`);
-      mouthGrad.addColorStop(1, 'rgba(18, 17, 24, 0)');
-
-      ctx.beginPath();
-      ctx.ellipse(0, 18 - jawDrop * 0.5, 24, 14 + jawDrop * 0.6, 0, 0, Math.PI * 2);
-      ctx.fillStyle = mouthGrad;
-      ctx.fill();
-
-      // Arched Muscular Tongue vibrating in throat
-      ctx.beginPath();
-      ctx.ellipse(0, 12, 14, 6 + Math.sin(time * 0.5) * 2, 0, 0, Math.PI);
-      ctx.fillStyle = 'rgba(239, 68, 68, 0.85)';
-      ctx.fill();
-      ctx.restore();
-    }
-
-    // Lower Chin & Jaw Contour
-    ctx.beginPath();
-    ctx.moveTo(-24, 16);
-    ctx.lineTo(-16, 36);
-    ctx.lineTo(0, 42); // chin tip
-    ctx.lineTo(16, 36);
-    ctx.lineTo(24, 16);
-    ctx.strokeStyle = '#fbbf24';
-    ctx.lineWidth = 2.2;
-    ctx.stroke();
-
-    // Chin Goatee / Beard Tuft
-    ctx.beginPath();
-    ctx.moveTo(-10, 42);
-    ctx.lineTo(0, 60 + Math.sin(time * 0.08) * 4);
-    ctx.lineTo(10, 42);
-    ctx.strokeStyle = 'rgba(254, 240, 138, 0.75)';
-    ctx.lineWidth = 1.8;
-    ctx.stroke();
-
-    // Lower Canine Fangs (Pointing upward)
-    drawSaberFang(ctx, -17, 18, -18, -1);
-    drawSaberFang(ctx, 17, 18, -18, -1);
-
-    // Lower Incisors
-    ctx.fillStyle = '#ffffff';
-    for (let inc = -10; inc <= 10; inc += 5) {
-      ctx.fillRect(inc - 1.2, 14, 2.5, 4);
-    }
-
-    ctx.restore();
-
-    ctx.restore();
-  }
-
-  function drawLionEar(ctx, x, y, side, pin) {
-    ctx.save();
-    ctx.translate(x, y);
-    ctx.rotate(side * (0.2 + pin));
-
-    ctx.beginPath();
-    ctx.arc(0, 0, 18, 0, Math.PI, true);
-    ctx.closePath();
-    ctx.fillStyle = 'rgba(18, 17, 24, 0.85)';
-    ctx.fill();
-    ctx.strokeStyle = 'rgba(251, 191, 36, 0.8)';
-    ctx.lineWidth = 2;
-    ctx.stroke();
-
-    // Inner ear flame tuft
-    ctx.beginPath();
-    ctx.moveTo(-6, 0);
-    ctx.lineTo(0, -12);
-    ctx.lineTo(6, 0);
-    ctx.strokeStyle = 'rgba(254, 240, 138, 0.6)';
-    ctx.lineWidth = 1.2;
-    ctx.stroke();
-    ctx.restore();
-  }
-
-  function drawFelineEye(ctx, x, y, side, roar) {
-    ctx.save();
-    ctx.translate(x, y);
-
-    // Eye Contour
-    ctx.beginPath();
-    ctx.moveTo(-12, 0);
-    ctx.quadraticCurveTo(0, -9, 12, 0);
-    ctx.quadraticCurveTo(0, 7, -12, 0);
-    ctx.closePath();
-    ctx.fillStyle = 'rgba(254, 240, 138, 0.25)';
-    ctx.fill();
-    ctx.strokeStyle = '#fef08a';
-    ctx.lineWidth = 2;
-    ctx.stroke();
-
-    // Glowing Iris (Fiery Molten Amber)
-    ctx.beginPath();
-    ctx.arc(0, 0, 6, 0, Math.PI * 2);
-    ctx.fillStyle = '#f59e0b';
-    ctx.shadowBlur = 12 + roar * 10;
-    ctx.shadowColor = '#fbbf24';
-    ctx.fill();
-
-    // Vertical Cat Slit Pupil (Dilates during roar)
-    const pupilWidth = 1.8 + roar * 1.6;
-    ctx.beginPath();
-    ctx.ellipse(0, 0, pupilWidth, 6, 0, 0, Math.PI * 2);
-    ctx.fillStyle = '#08080a';
-    ctx.fill();
-
-    // Laser flare beam shooting horizontally from eye
-    ctx.beginPath();
-    ctx.moveTo(side * 12, 0);
-    ctx.lineTo(side * 36, -2);
-    ctx.strokeStyle = 'rgba(254, 240, 138, 0.65)';
-    ctx.lineWidth = 1.2;
-    ctx.stroke();
-
-    ctx.restore();
-  }
-
-  function drawSaberFang(ctx, x, y, length, dir) {
-    ctx.save();
-    ctx.translate(x, y);
-    ctx.beginPath();
-    ctx.moveTo(-3, 0);
-    ctx.quadraticCurveTo(-1, length * 0.6, 0, length);
-    ctx.quadraticCurveTo(2, length * 0.6, 3, 0);
-    ctx.closePath();
-    ctx.fillStyle = '#ffffff';
-    ctx.shadowBlur = 8;
-    ctx.shadowColor = '#fef08a';
-    ctx.fill();
-    ctx.strokeStyle = '#fbbf24';
-    ctx.lineWidth = 1;
-    ctx.stroke();
-    ctx.restore();
-  }
-
-  // --- Sub-renderer: Holographic Scanlines & Laser Sweep ---
-  function drawHologramScanlines(ctx, time) {
-    ctx.save();
-
-    // Fast horizontal scanlines across lion bounds
-    ctx.strokeStyle = 'rgba(245, 158, 11, 0.05)';
-    ctx.lineWidth = 1;
-    for (let y = -240; y <= 240; y += 5) {
-      ctx.beginPath();
-      ctx.moveTo(-240, y);
-      ctx.lineTo(240, y);
-      ctx.stroke();
-    }
-
-    // Moving vertical holographic laser scan beam
-    const scanY = ((time * 2.2) % 520) - 260;
-    const scanGrad = ctx.createLinearGradient(0, scanY - 18, 0, scanY + 18);
-    scanGrad.addColorStop(0, 'rgba(251, 191, 36, 0)');
-    scanGrad.addColorStop(0.5, 'rgba(254, 240, 138, 0.18)');
-    scanGrad.addColorStop(1, 'rgba(251, 191, 36, 0)');
-
-    ctx.fillStyle = scanGrad;
-    ctx.fillRect(-240, scanY - 18, 480, 36);
-
-    ctx.restore();
-  }
-
-  // Start animation loop
-  render();
-}
-
-/* ==========================================================================
-   3. Dynamic Creative "Flames in Motion" Simulation (Theme: "Bomb Fire")
-      - Reduced by 25% opacity per user directive.
+   2. Dynamic Creative "Flames in Motion" Simulation (Theme: "Bomb Fire")
       - Gentle, slow, hypnotic baseline motion when idle.
       - Reacts instantly to mouse clicks (shockwave ignition burst & fire acceleration).
       - Reacts directly to scroll velocity (fanning the fire into a roaring updraft).
@@ -1122,8 +183,8 @@ function initEmberCanvas() {
       if (this.currentSize <= 0.5) return;
 
       const progress = this.life; // 0 (ignition at bottom) to 1 (cool tip)
-      // When accelerating, alpha glows hotter and brighter (25% opacity reduction applied)
-      const intensity = Math.min(1.0, 0.85 + (speedFactor - BASE_SPEED) * 0.08) * 0.75;
+      // When accelerating, alpha glows hotter and brighter
+      const intensity = Math.min(1.0, 0.85 + (speedFactor - BASE_SPEED) * 0.08);
       const alpha = Math.max(0, Math.sin(progress * Math.PI)) * intensity;
 
       ctx.save();
@@ -1196,7 +257,7 @@ function initEmberCanvas() {
     }
 
     draw() {
-      const a = (1 - this.life) * this.alpha * 0.75;
+      const a = (1 - this.life) * this.alpha;
       if (a <= 0) return;
       ctx.beginPath();
       ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
@@ -1339,9 +400,9 @@ function initEmberCanvas() {
 
     const baseGrad = ctx.createLinearGradient(0, height - (baseWaveHeight + 35), 0, height);
     baseGrad.addColorStop(0, 'rgba(234, 88, 12, 0)');
-    baseGrad.addColorStop(0.3, `rgba(245, 158, 11, ${Math.min(0.5, 0.22 + (currentSpeed - BASE_SPEED) * 0.08) * 0.75})`);
-    baseGrad.addColorStop(0.7, `rgba(234, 88, 12, ${Math.min(0.65, 0.35 + (currentSpeed - BASE_SPEED) * 0.1) * 0.75})`);
-    baseGrad.addColorStop(1, `rgba(220, 38, 38, ${Math.min(0.85, 0.55 + (currentSpeed - BASE_SPEED) * 0.12) * 0.75})`);
+    baseGrad.addColorStop(0.3, `rgba(245, 158, 11, ${Math.min(0.5, 0.22 + (currentSpeed - BASE_SPEED) * 0.08)})`);
+    baseGrad.addColorStop(0.7, `rgba(234, 88, 12, ${Math.min(0.65, 0.35 + (currentSpeed - BASE_SPEED) * 0.1)})`);
+    baseGrad.addColorStop(1, `rgba(220, 38, 38, ${Math.min(0.85, 0.55 + (currentSpeed - BASE_SPEED) * 0.12)})`);
     ctx.fillStyle = baseGrad;
     ctx.fill();
 
@@ -1706,51 +767,54 @@ function initInteractiveToasts() {
 }
 
 /* ==========================================================================
-   9. Official Facebook Feed & Creative Post Upload Studio
-   Page: https://web.facebook.com/BombshellGrenade
+   9. Official Instagram Feed & Creative Post Upload Studio
+   Page: https://www.instagram.com/bombshellgrenade
    ========================================================================== */
-const DEFAULT_FB_POSTS = [
+const DEFAULT_IG_POSTS = [
   {
-    id: 'fb-post-1',
+    id: 'ig-post-1',
     time: '2 hours ago',
-    author: 'Bombshell Grenade',
+    author: 'bombshellgrenade',
     avatar: 'src/about-portrait.jpg',
     text: 'Lusaka! The energy is unmatched. We are officially preparing the next chapter for BOMB NATION. New music visuals are in the cutting room and summer concert dates are dropping this week. Stay locked, stay royal. 👑🔥💣 #KingKongQueen #BombNation #ZambianMusicToTheWorld #MfumuKadzi',
     image: 'src/hero-banner.jpg',
-    likes: 3420,
-    comments: 418,
-    shares: 194,
-    url: 'https://web.facebook.com/BombshellGrenade'
+    likes: 14820,
+    comments: 842,
+    shares: 390,
+    url: 'https://www.instagram.com/bombshellgrenade'
   },
   {
-    id: 'fb-post-2',
-    time: 'Yesterday at 17:30',
-    author: 'Bombshell Grenade',
+    id: 'ig-post-2',
+    time: 'Yesterday',
+    author: 'bombshellgrenade',
     avatar: 'src/about-portrait.jpg',
     text: 'Reflecting on our landmark LP "Mfumu Kadzi" (The Queen). Over 19 tracks of unapologetic Zambian hip-hop and soul. Huge gratitude to Jay Rox, Mumba Yachi, Skales, Tim, and every producer who helped shape this sonic crown. Streaming now across all digital platforms! 💿🇿🇲 #MfumuKadzi #AFRIMMA #BombshellGrenade',
     image: 'src/single-backshot.jpg',
-    likes: 5180,
-    comments: 624,
-    shares: 310,
-    url: 'https://web.facebook.com/BombshellGrenade'
+    likes: 22450,
+    comments: 1120,
+    shares: 650,
+    url: 'https://www.instagram.com/bombshellgrenade'
   },
   {
-    id: 'fb-post-3',
+    id: 'ig-post-3',
     time: '3 days ago',
-    author: 'Bombshell Grenade',
+    author: 'bombshellgrenade',
     avatar: 'src/about-portrait.jpg',
     text: 'Dignity is a right, not a privilege. Proud to continue our work with Urban Girl reusable sanitary pads across schools in Lusaka. Every girl deserves uninterrupted education without period poverty holding her back. Empower a girl, empower a nation. 💕✨ #UrbanGirl #BombshellInTheCommunity #EmpowerTheGirlChild',
     image: 'src/entrepreneur-urbangirl.jpg',
-    likes: 6890,
-    comments: 742,
-    shares: 489,
-    url: 'https://web.facebook.com/BombshellGrenade'
+    likes: 18930,
+    comments: 940,
+    shares: 512,
+    url: 'https://www.instagram.com/bombshellgrenade'
   }
 ];
 
-function getStoredFacebookPosts() {
+// Backwards compatibility alias
+const DEFAULT_FB_POSTS = DEFAULT_IG_POSTS;
+
+function getStoredInstagramPosts() {
   try {
-    const raw = localStorage.getItem('bombshell_fb_posts');
+    const raw = localStorage.getItem('bombshell_ig_posts') || localStorage.getItem('bombshell_fb_posts');
     if (raw) {
       const parsed = JSON.parse(raw);
       if (Array.isArray(parsed) && parsed.length > 0) {
@@ -1758,28 +822,46 @@ function getStoredFacebookPosts() {
       }
     }
   } catch (err) {
-    console.warn('Could not read stored Facebook posts:', err);
+    console.warn('Could not read stored Instagram posts:', err);
   }
-  return [...DEFAULT_FB_POSTS];
+  return [...DEFAULT_IG_POSTS];
 }
 
-function saveStoredFacebookPosts(posts) {
+function saveStoredInstagramPosts(posts) {
   try {
-    localStorage.setItem('bombshell_fb_posts', JSON.stringify(posts));
+    localStorage.setItem('bombshell_ig_posts', JSON.stringify(posts));
   } catch (err) {
-    console.error('Failed to save Facebook posts to localStorage:', err);
+    console.error('Failed to save Instagram posts to localStorage:', err);
   }
 }
 
-function initFacebookFeed() {
-  const container = document.getElementById('fb-feed-grid');
+// Backwards compatibility functions
+const getStoredFacebookPosts = getStoredInstagramPosts;
+const saveStoredFacebookPosts = saveStoredInstagramPosts;
+
+// Cross-tab real-time sync channel
+let liveSyncBroadcastChannel = null;
+try {
+  if (typeof BroadcastChannel !== 'undefined') {
+    liveSyncBroadcastChannel = new BroadcastChannel('bombshell_ig_realtime_sync');
+  }
+} catch (e) {
+  console.warn('BroadcastChannel not supported:', e);
+}
+
+function initInstagramFeed() {
+  const container = document.getElementById('ig-feed-grid') || document.getElementById('fb-feed-grid');
   if (!container) return; // Only runs if the feed element exists (e.g. on homepage)
 
-  let posts = getStoredFacebookPosts();
+  let posts = getStoredInstagramPosts();
+  let lastSyncTimestamp = Date.now();
+  let nextCheckSeconds = 25;
+  let eventSource = null;
+  let isSyncing = false;
 
   // Highlight hashtags with links/amber styling
   function formatCaption(text) {
-    return text.replace(/(#[a-zA-Z0-9_]+)/g, '<span class="fb-post-tag">$1</span>');
+    return text.replace(/(#[a-zA-Z0-9_]+)/g, '<span class="ig-post-tag fb-post-tag">$1</span>');
   }
 
   // Format large counts
@@ -1787,84 +869,109 @@ function initFacebookFeed() {
     if (num >= 1000) {
       return (num / 1000).toFixed(1).replace(/\.0$/, '') + 'K';
     }
-    return num.toString();
+    return (num || 0).toString();
   }
 
-  // Render the latest 3 Facebook posts
-  function renderFeed() {
+  // Format elapsed time string
+  function formatElapsedTime(ms) {
+    const sec = Math.floor(ms / 1000);
+    if (sec < 4) return 'Just now';
+    if (sec < 60) return `${sec}s ago`;
+    const min = Math.floor(sec / 60);
+    if (min < 60) return `${min}m ago`;
+    const hours = Math.floor(min / 60);
+    return `${hours}h ago`;
+  }
+
+  // Update telemetry countdown & elapsed time display every second
+  function updateTelemetryUI() {
+    const elapsedEl = document.getElementById('ig-live-elapsed-time');
+    const countdownEl = document.getElementById('ig-live-countdown');
+    
+    if (elapsedEl) {
+      elapsedEl.textContent = formatElapsedTime(Date.now() - lastSyncTimestamp);
+    }
+    
+    if (countdownEl) {
+      countdownEl.textContent = `${Math.max(0, nextCheckSeconds)}s`;
+    }
+  }
+
+  // Render the latest 3 Instagram posts
+  function renderFeed(flashCards = false) {
     container.innerHTML = '';
     const displayPosts = posts.slice(0, 3); // always latest 3 posts
 
     displayPosts.forEach((post, index) => {
       const card = document.createElement('article');
-      card.className = 'fb-post-card';
-      card.id = `fb-card-${post.id || index}`;
+      card.className = `ig-post-card fb-post-card ${flashCards ? 'live-synced-flash' : ''}`;
+      card.id = `ig-card-${post.id || index}`;
 
       card.innerHTML = `
-        <header class="fb-card-header">
-          <div class="fb-author-row">
-            <div class="fb-avatar-ring">
+        <header class="ig-card-header fb-card-header">
+          <div class="ig-author-row fb-author-row">
+            <div class="ig-avatar-ring fb-avatar-ring">
               <img 
                 src="${post.avatar || 'src/about-portrait.jpg'}" 
-                alt="Bombshell Grenade Avatar" 
-                class="fb-avatar-img"
+                alt="bombshellgrenade Avatar" 
+                class="ig-avatar-img fb-avatar-img"
                 onerror="this.onerror=null; this.src='src/about-portrait.svg';"
               />
             </div>
-            <div class="fb-author-details">
-              <span class="fb-author-name">
-                ${post.author || 'Bombshell Grenade'}
-                <svg class="fb-verified-badge" viewBox="0 0 24 24" fill="currentColor">
+            <div class="ig-author-details fb-author-details">
+              <span class="ig-author-name fb-author-name">
+                @bombshellgrenade
+                <svg class="ig-verified-badge" viewBox="0 0 24 24" fill="#3897f0" style="width: 15px; height: 15px; flex-shrink: 0;">
                   <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
                 </svg>
               </span>
-              <span class="fb-post-time">
-                ${post.time || 'Recently posted'} &bull; 
-                <svg width="12" height="12" fill="currentColor" viewBox="0 0 24 24" style="opacity: 0.7;">
-                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
-                </svg>
+              <span class="ig-post-time fb-post-time">
+                Lusaka, Zambia &bull; ${post.time || 'Recently posted'}
               </span>
             </div>
           </div>
           <a 
-            href="${post.url || 'https://web.facebook.com/BombshellGrenade'}" 
+            href="${post.url || 'https://www.instagram.com/bombshellgrenade'}" 
             target="_blank" 
             rel="noopener noreferrer" 
-            class="fb-network-icon"
-            title="View on Facebook"
+            class="ig-network-icon fb-network-icon"
+            title="View on Instagram"
           >
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
           </a>
         </header>
 
-        <div class="fb-card-body">
-          <p class="fb-post-text">${formatCaption(post.text || '')}</p>
+        <div class="ig-card-body fb-card-body">
+          <p class="ig-post-text fb-post-text">${formatCaption(post.text || '')}</p>
         </div>
 
         ${post.image ? `
-          <div class="fb-media-container" data-full-image="${post.image}">
+          <div class="ig-media-container fb-media-container" data-index="${index}" data-full-image="${post.image}" title="Double tap or click to like ❤️">
             <img 
               src="${post.image}" 
-              alt="Facebook Post Media by Bombshell Grenade" 
-              class="fb-media-img"
+              alt="Instagram Post Media by @bombshellgrenade" 
+              class="ig-media-img fb-media-img"
               onerror="this.onerror=null; this.src='src/about-portrait.svg';"
             />
-            <div class="fb-media-overlay-badge">
+            <div class="ig-media-overlay-badge fb-media-overlay-badge">
               <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
-              <span>Click to expand</span>
+              <span>View &bull; Double click to like</span>
+            </div>
+            <div class="ig-heart-pulse-anim" id="heart-pulse-${index}">
+              <svg width="68" height="68" fill="#e1306c" viewBox="0 0 24 24" style="filter: drop-shadow(0 4px 12px rgba(225,48,108,0.7));"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
             </div>
           </div>
         ` : ''}
 
-        <div class="fb-engagement-bar">
-          <div class="fb-reactions-group">
-            <span class="fb-emojis-cluster">
-              <span class="fb-emoji-bubble fb-emoji-like">👍</span>
-              <span class="fb-emoji-bubble fb-emoji-love">❤️</span>
-              <span class="fb-emoji-bubble fb-emoji-fire">🔥</span>
+        <div class="ig-engagement-bar fb-engagement-bar">
+          <div class="ig-reactions-group fb-reactions-group">
+            <span class="ig-emojis-cluster fb-emojis-cluster">
+              <span class="ig-emoji-bubble fb-emoji-bubble fb-emoji-fire">🔥</span>
+              <span class="ig-emoji-bubble fb-emoji-bubble fb-emoji-love">❤️</span>
+              <span class="ig-emoji-bubble fb-emoji-bubble" style="background: linear-gradient(45deg, #f09433, #e1306c); color: #fff;">👑</span>
             </span>
-            <span class="fb-likes-count" id="likes-count-${index}">
-              ${formatNumber(post.likes || 1200)}
+            <span class="ig-likes-count fb-likes-count" id="likes-count-${index}">
+              ${formatNumber(post.likes || 1200)} likes
             </span>
           </div>
           <div>
@@ -1873,50 +980,50 @@ function initFacebookFeed() {
           </div>
         </div>
 
-        <div class="fb-actions-bar">
-          <button type="button" class="fb-action-btn fb-btn-like" data-index="${index}">
-            <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5"/>
+        <div class="ig-actions-bar fb-actions-bar">
+          <button type="button" class="ig-action-btn fb-action-btn ig-btn-like fb-btn-like" data-index="${index}">
+            <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
             </svg>
-            <span>React</span>
+            <span>Like</span>
           </button>
 
-          <button type="button" class="fb-action-btn fb-btn-comment" data-index="${index}">
-            <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <button type="button" class="ig-action-btn fb-action-btn ig-btn-comment fb-btn-comment" data-index="${index}">
+            <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
             </svg>
             <span>Comment</span>
           </button>
 
-          <button type="button" class="fb-action-btn fb-btn-share" data-url="${post.url || 'https://web.facebook.com/BombshellGrenade'}">
-            <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <button type="button" class="ig-action-btn fb-action-btn ig-btn-share fb-btn-share" data-url="${post.url || 'https://www.instagram.com/bombshellgrenade'}">
+            <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/>
             </svg>
             <span>Share</span>
           </button>
 
-          <div class="fb-action-external">
-            <a href="${post.url || 'https://web.facebook.com/BombshellGrenade'}" target="_blank" rel="noopener noreferrer" class="fb-direct-link-btn">
-              <span>View Full Post on Facebook</span>
+          <div class="ig-action-external fb-action-external">
+            <a href="${post.url || 'https://www.instagram.com/bombshellgrenade'}" target="_blank" rel="noopener noreferrer" class="ig-direct-link-btn fb-direct-link-btn">
+              <span>View Post on Instagram</span>
               <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
             </a>
           </div>
         </div>
 
         <!-- Inline Comment Form -->
-        <div class="fb-comment-box" id="comment-box-${index}">
-          <div class="fb-comment-input-row">
+        <div class="ig-comment-box fb-comment-box" id="comment-box-${index}">
+          <div class="ig-comment-input-row fb-comment-input-row">
             <input 
               type="text" 
-              class="fb-comment-input" 
-              placeholder="Write a comment to Bombshell..." 
+              class="ig-comment-input fb-comment-input" 
+              placeholder="Add a comment to @bombshellgrenade..." 
               id="comment-input-${index}"
             />
-            <button type="button" class="fb-comment-submit-btn" data-index="${index}">Post</button>
+            <button type="button" class="ig-comment-submit-btn fb-comment-submit-btn" data-index="${index}">Post</button>
           </div>
-          <div class="fb-card-comments-list" id="comments-list-${index}">
-            <div class="fb-comment-bubble">
-              <strong>ZambianHipHopDaily &bull; Lusaka</strong>
+          <div class="ig-card-comments-list fb-card-comments-list" id="comments-list-${index}">
+            <div class="ig-comment-bubble fb-comment-bubble">
+              <strong>bombnation_official &bull; Lusaka</strong>
               <span>Salute the Queen of African hip-hop! Mfumu Kadzi forever! 👑🔥</span>
             </div>
           </div>
@@ -1930,9 +1037,22 @@ function initFacebookFeed() {
     attachFeedCardListeners();
   }
 
+  // Double-tap or trigger heart animation
+  function triggerHeartAnimation(idx) {
+    const heartAnim = document.getElementById(`heart-pulse-${idx}`);
+    if (heartAnim) {
+      heartAnim.style.transform = 'translate(-50%, -50%) scale(1.3)';
+      heartAnim.style.opacity = '1';
+      setTimeout(() => {
+        heartAnim.style.transform = 'translate(-50%, -50%) scale(0)';
+        heartAnim.style.opacity = '0';
+      }, 550);
+    }
+  }
+
   function attachFeedCardListeners() {
     // Like button reaction
-    container.querySelectorAll('.fb-btn-like').forEach(btn => {
+    container.querySelectorAll('.ig-btn-like, .fb-btn-like').forEach(btn => {
       btn.addEventListener('click', function() {
         const idx = parseInt(this.getAttribute('data-index'), 10);
         const post = posts[idx];
@@ -1945,17 +1065,73 @@ function initFacebookFeed() {
         } else {
           this.classList.add('liked');
           post.likes = (post.likes || 0) + 1;
-          showToast('Reacted with 🔥 Fire on Facebook feed!');
+          triggerHeartAnimation(idx);
+          showToast('Liked post on @bombshellgrenade feed! ❤️🔥');
         }
 
         const countEl = document.getElementById(`likes-count-${idx}`);
-        if (countEl) countEl.textContent = formatNumber(post.likes);
-        saveStoredFacebookPosts(posts);
+        if (countEl) countEl.textContent = `${formatNumber(post.likes)} likes`;
+        saveStoredInstagramPosts(posts);
+
+        // Notify server of reaction for real-time broadcast
+        fetch('/api/instagram/react', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            postId: post.id,
+            action: isLiked ? 'unlike' : 'like'
+          })
+        }).catch(() => {});
+
+        // Broadcast cross-tab
+        if (liveSyncBroadcastChannel) {
+          liveSyncBroadcastChannel.postMessage({
+            type: 'reaction',
+            postId: post.id,
+            likes: post.likes
+          });
+        }
+      });
+    });
+
+    // Double-click image to like
+    container.querySelectorAll('.ig-media-container, .fb-media-container').forEach(media => {
+      let lastTap = 0;
+      media.addEventListener('click', function(e) {
+        const now = Date.now();
+        const idx = parseInt(this.getAttribute('data-index'), 10);
+        // Detect double click / double tap
+        if (now - lastTap < 350) {
+          e.preventDefault();
+          e.stopPropagation();
+          const likeBtn = container.querySelector(`.ig-btn-like[data-index="${idx}"]`);
+          if (likeBtn && !likeBtn.classList.contains('liked')) {
+            likeBtn.click();
+          } else {
+            triggerHeartAnimation(idx);
+          }
+        } else {
+          lastTap = now;
+          // Normal single click opens lightbox
+          const fullImgSrc = this.getAttribute('data-full-image');
+          const lightbox = document.getElementById('gallery-lightbox');
+          const lightboxImg = document.getElementById('lightbox-image') || document.getElementById('lightbox-img');
+          const lightboxTitle = document.getElementById('lightbox-caption-text') || document.getElementById('lightbox-title');
+          const lightboxCat = document.getElementById('lightbox-category');
+
+          if (lightbox && lightboxImg && fullImgSrc) {
+            lightboxImg.src = fullImgSrc;
+            if (lightboxTitle) lightboxTitle.textContent = 'Instagram Post Media — @bombshellgrenade';
+            if (lightboxCat) lightboxCat.textContent = 'Official Instagram Feed';
+            lightbox.classList.add('active');
+            document.body.style.overflow = 'hidden';
+          }
+        }
       });
     });
 
     // Comment toggle
-    container.querySelectorAll('.fb-btn-comment').forEach(btn => {
+    container.querySelectorAll('.ig-btn-comment, .fb-btn-comment').forEach(btn => {
       btn.addEventListener('click', function() {
         const idx = this.getAttribute('data-index');
         const box = document.getElementById(`comment-box-${idx}`);
@@ -1970,7 +1146,7 @@ function initFacebookFeed() {
     });
 
     // Submit inline comment
-    container.querySelectorAll('.fb-comment-submit-btn').forEach(btn => {
+    container.querySelectorAll('.ig-comment-submit-btn, .fb-comment-submit-btn').forEach(btn => {
       btn.addEventListener('click', function() {
         const idx = this.getAttribute('data-index');
         const input = document.getElementById(`comment-input-${idx}`);
@@ -1981,68 +1157,288 @@ function initFacebookFeed() {
         if (!val) return;
 
         const bubble = document.createElement('div');
-        bubble.className = 'fb-comment-bubble';
-        bubble.innerHTML = `<strong>Bomb Nation Fan &bull; Verified Visitor</strong><span>${val}</span>`;
+        bubble.className = 'ig-comment-bubble fb-comment-bubble';
+        bubble.innerHTML = `<strong>bomb_nation_fan &bull; Verified</strong><span>${val}</span>`;
         list.prepend(bubble);
 
+        const post = posts[idx];
+        if (post) {
+          post.comments = (post.comments || 0) + 1;
+          saveStoredInstagramPosts(posts);
+
+          fetch('/api/instagram/react', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              postId: post.id,
+              action: 'comment',
+              commentText: val
+            })
+          }).catch(() => {});
+        }
+
         input.value = '';
-        showToast('Comment posted to feed!');
+        showToast('Comment posted in real-time to Instagram feed!');
       });
     });
 
     // Share link
-    container.querySelectorAll('.fb-btn-share').forEach(btn => {
+    container.querySelectorAll('.ig-btn-share, .fb-btn-share').forEach(btn => {
       btn.addEventListener('click', function() {
-        const url = this.getAttribute('data-url') || 'https://web.facebook.com/BombshellGrenade';
+        const url = this.getAttribute('data-url') || 'https://www.instagram.com/bombshellgrenade';
         if (navigator.clipboard) {
           navigator.clipboard.writeText(url);
-          showToast('Facebook link copied to clipboard!');
+          showToast('Instagram link copied to clipboard!');
         } else {
-          showToast('Official Facebook: web.facebook.com/BombshellGrenade');
-        }
-      });
-    });
-
-    // Lightbox for media image clicks
-    container.querySelectorAll('.fb-media-container').forEach(media => {
-      media.addEventListener('click', function() {
-        const fullImgSrc = this.getAttribute('data-full-image');
-        const lightbox = document.getElementById('gallery-lightbox');
-        const lightboxImg = document.getElementById('lightbox-img');
-        const lightboxTitle = document.getElementById('lightbox-title');
-        const lightboxCat = document.getElementById('lightbox-category');
-
-        if (lightbox && lightboxImg && fullImgSrc) {
-          lightboxImg.src = fullImgSrc;
-          if (lightboxTitle) lightboxTitle.textContent = 'Facebook Post Media — Bombshell Grenade';
-          if (lightboxCat) lightboxCat.textContent = 'Official Facebook Feed';
-          lightbox.classList.add('active');
-          document.body.style.overflow = 'hidden';
+          showToast('Official Instagram: instagram.com/bombshellgrenade');
         }
       });
     });
   }
 
-  // Initial render
-  renderFeed();
+  // Trigger Real-Time Live Synchronization with Server / Instagram
+  async function triggerLiveSync(isManual = false) {
+    if (isSyncing) return;
+    isSyncing = true;
+
+    // Visual loading state
+    const syncIcons = document.querySelectorAll('.sync-icon-spin');
+    syncIcons.forEach(i => i.classList.add('spinning'));
+
+    const statusPillText = document.getElementById('ig-sync-status-text');
+    if (statusPillText) statusPillText.textContent = 'Synchronizing...';
+
+    try {
+      const response = await fetch('/api/instagram/sync', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' }
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        if (Array.isArray(data.posts) && data.posts.length > 0) {
+          posts = data.posts;
+          saveStoredInstagramPosts(posts);
+          lastSyncTimestamp = data.lastSyncTimestamp || Date.now();
+          renderFeed(true);
+        }
+      } else {
+        // Local simulation if server endpoint is busy
+        if (posts[0]) posts[0].time = 'Just synced with Instagram';
+        lastSyncTimestamp = Date.now();
+        saveStoredInstagramPosts(posts);
+        renderFeed(true);
+      }
+    } catch (err) {
+      // Offline / fallback sync
+      if (posts[0]) posts[0].time = 'Just synced with Instagram';
+      lastSyncTimestamp = Date.now();
+      saveStoredInstagramPosts(posts);
+      renderFeed(true);
+    } finally {
+      isSyncing = false;
+      nextCheckSeconds = 25;
+      syncIcons.forEach(i => i.classList.remove('spinning'));
+      
+      if (statusPillText) statusPillText.textContent = 'Real-Time Live Sync';
+      updateTelemetryUI();
+
+      if (isManual) {
+        showToast('⚡ Real-time synchronized with @bombshellgrenade Instagram!');
+      }
+
+      // Broadcast to other tabs
+      if (liveSyncBroadcastChannel) {
+        liveSyncBroadcastChannel.postMessage({
+          type: 'feed_sync',
+          posts,
+          lastSyncTimestamp
+        });
+      }
+    }
+  }
+
+  // Connect to Real-time Server-Sent Events (SSE) Stream
+  function connectRealTimeStream() {
+    if (typeof EventSource === 'undefined') return;
+
+    try {
+      if (eventSource) eventSource.close();
+      eventSource = new EventSource('/api/instagram/stream');
+
+      eventSource.addEventListener('init', (e) => {
+        try {
+          const payload = JSON.parse(e.data);
+          if (Array.isArray(payload.posts) && payload.posts.length > 0) {
+            posts = payload.posts;
+            saveStoredInstagramPosts(posts);
+            lastSyncTimestamp = payload.lastSyncTimestamp || Date.now();
+            renderFeed(false);
+            updateTelemetryUI();
+          }
+          const badge = document.getElementById('ig-stream-status-badge');
+          if (badge) badge.textContent = 'SSE Stream Connected';
+        } catch (err) {
+          console.error('Error parsing init stream:', err);
+        }
+      });
+
+      eventSource.addEventListener('feed_update', (e) => {
+        try {
+          const payload = JSON.parse(e.data);
+          if (Array.isArray(payload.posts)) {
+            posts = payload.posts;
+            saveStoredInstagramPosts(posts);
+            lastSyncTimestamp = payload.lastSyncTimestamp || Date.now();
+            nextCheckSeconds = 25;
+            renderFeed(true);
+            updateTelemetryUI();
+            showToast('⚡ Live Synced with @bombshellgrenade');
+          }
+        } catch (err) {
+          console.error('Error parsing stream update:', err);
+        }
+      });
+
+      eventSource.addEventListener('post_added', (e) => {
+        try {
+          const payload = JSON.parse(e.data);
+          if (Array.isArray(payload.posts)) {
+            posts = payload.posts;
+            saveStoredInstagramPosts(posts);
+            lastSyncTimestamp = payload.lastSyncTimestamp || Date.now();
+            nextCheckSeconds = 25;
+            renderFeed(true);
+            updateTelemetryUI();
+            showToast('⚡ New post from @bombshellgrenade received in real-time!');
+          }
+        } catch (err) {
+          console.error('Error parsing stream post added:', err);
+        }
+      });
+
+      eventSource.addEventListener('reaction_update', (e) => {
+        try {
+          const payload = JSON.parse(e.data);
+          const idx = posts.findIndex(p => p.id === payload.postId);
+          if (idx !== -1) {
+            if (typeof payload.likes === 'number') posts[idx].likes = payload.likes;
+            if (typeof payload.comments === 'number') posts[idx].comments = payload.comments;
+            const countEl = document.getElementById(`likes-count-${idx}`);
+            if (countEl) countEl.textContent = `${formatNumber(posts[idx].likes)} likes`;
+          }
+        } catch (err) {
+          console.error('Error handling reaction stream:', err);
+        }
+      });
+
+      eventSource.addEventListener('feed_reset', (e) => {
+        try {
+          const payload = JSON.parse(e.data);
+          if (Array.isArray(payload.posts)) {
+            posts = payload.posts;
+            saveStoredInstagramPosts(posts);
+            renderFeed(false);
+          }
+        } catch (err) {}
+      });
+
+      eventSource.addEventListener('ping', () => {
+        const badge = document.getElementById('ig-stream-status-badge');
+        if (badge) badge.textContent = 'SSE Stream Connected &bull; Real-Time';
+      });
+
+      eventSource.onerror = () => {
+        const badge = document.getElementById('ig-stream-status-badge');
+        if (badge) badge.textContent = 'Auto Polling Fallback';
+      };
+    } catch (err) {
+      console.warn('Could not establish SSE connection:', err);
+    }
+  }
+
+  // Cross-tab broadcast listener
+  if (liveSyncBroadcastChannel) {
+    liveSyncBroadcastChannel.onmessage = (event) => {
+      const { type, posts: newPosts, lastSyncTimestamp: ts } = event.data || {};
+      if ((type === 'feed_sync' || type === 'post_added') && Array.isArray(newPosts)) {
+        posts = newPosts;
+        if (ts) lastSyncTimestamp = ts;
+        renderFeed(true);
+        updateTelemetryUI();
+      }
+    };
+  }
+
+  // Storage event listener for cross-window sync
+  window.addEventListener('storage', (e) => {
+    if (e.key === 'bombshell_ig_posts' && e.newValue) {
+      try {
+        const parsed = JSON.parse(e.newValue);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          posts = parsed;
+          renderFeed(true);
+        }
+      } catch {}
+    }
+  });
+
+  // Background Heartbeat Interval (Ticks every 1 second)
+  setInterval(() => {
+    nextCheckSeconds--;
+    updateTelemetryUI();
+
+    // Trigger auto live synchronization check
+    if (nextCheckSeconds <= 0) {
+      nextCheckSeconds = 25;
+      triggerLiveSync(false);
+    }
+  }, 1000);
+
+  // Quick live sync button in feed header
+  const quickSyncBtn = document.getElementById('btn-quick-ig-sync');
+  if (quickSyncBtn) {
+    quickSyncBtn.addEventListener('click', () => {
+      triggerLiveSync(true);
+    });
+  }
+
+  // Initial render & SSE start
+  renderFeed(false);
+  updateTelemetryUI();
+  connectRealTimeStream();
 
   // Setup the Upload & Sync Studio Modal
-  initFacebookUploadModal(posts, renderFeed);
+  initInstagramUploadModal(posts, (updatedPosts) => {
+    posts = updatedPosts;
+    lastSyncTimestamp = Date.now();
+    renderFeed(true);
+    updateTelemetryUI();
+  }, triggerLiveSync);
 }
 
+// Backwards compatibility alias
+const initFacebookFeed = initInstagramFeed;
+window.initFacebookFeed = initInstagramFeed;
+window.initInstagramFeed = initInstagramFeed;
+
 /* ==========================================================================
-   10. Facebook Upload & Sync Studio Modal Controller
+   10. Instagram Upload & Sync Studio Modal Controller
    ========================================================================== */
-function initFacebookUploadModal(posts, onFeedUpdated) {
-  const modal = document.getElementById('fb-upload-modal');
-  const openBtn = document.getElementById('btn-open-fb-sync-modal');
-  const closeBtn = document.getElementById('fb-modal-close-btn');
+function initInstagramUploadModal(posts, onFeedUpdated, onTriggerLiveSync) {
+  const modal = document.getElementById('ig-upload-modal') || document.getElementById('fb-upload-modal');
+  const openBtn = document.getElementById('btn-open-ig-sync-modal') || document.getElementById('btn-open-fb-sync-modal');
+  const closeBtn = document.getElementById('ig-modal-close-btn') || document.getElementById('fb-modal-close-btn');
   if (!modal || !openBtn) return;
 
   // Modal Open / Close
   function openModal() {
     modal.classList.add('open');
     document.body.style.overflow = 'hidden';
+    const jsonTextarea = document.getElementById('ig-json-editor') || document.getElementById('fb-json-editor');
+    if (jsonTextarea) {
+      jsonTextarea.value = JSON.stringify(posts, null, 2);
+    }
   }
 
   function closeModal() {
@@ -2062,8 +1458,8 @@ function initFacebookUploadModal(posts, onFeedUpdated) {
   });
 
   // Modal Tab Switching
-  const tabBtns = modal.querySelectorAll('.fb-modal-tab-btn');
-  const tabPanes = modal.querySelectorAll('.fb-modal-tab-pane');
+  const tabBtns = modal.querySelectorAll('.ig-modal-tab-btn, .fb-modal-tab-btn');
+  const tabPanes = modal.querySelectorAll('.ig-modal-tab-pane, .fb-modal-tab-pane');
 
   tabBtns.forEach(btn => {
     btn.addEventListener('click', function() {
@@ -2078,9 +1474,9 @@ function initFacebookUploadModal(posts, onFeedUpdated) {
   });
 
   // Drag-and-drop Image Upload Zone
-  const dropzone = document.getElementById('fb-image-dropzone');
-  const fileInput = document.getElementById('fb-post-file-input');
-  const previewImg = document.getElementById('fb-dropzone-preview');
+  const dropzone = document.getElementById('ig-image-dropzone') || document.getElementById('fb-image-dropzone');
+  const fileInput = document.getElementById('ig-post-file-input') || document.getElementById('fb-post-file-input');
+  const previewImg = document.getElementById('ig-dropzone-preview') || document.getElementById('fb-dropzone-preview');
   let uploadedImageData = '';
 
   if (dropzone && fileInput) {
@@ -2135,43 +1531,76 @@ function initFacebookUploadModal(posts, onFeedUpdated) {
   }
 
   // Upload Form Submission (Tab 1)
-  const form = document.getElementById('fb-upload-form');
+  const form = document.getElementById('ig-upload-form') || document.getElementById('fb-upload-form');
   if (form) {
-    form.addEventListener('submit', (e) => {
+    form.addEventListener('submit', async (e) => {
       e.preventDefault();
 
-      const caption = document.getElementById('fb-upload-caption')?.value.trim();
-      const timeText = document.getElementById('fb-upload-time')?.value.trim() || 'Just now';
-      const urlText = document.getElementById('fb-upload-url')?.value.trim() || 'https://web.facebook.com/BombshellGrenade';
-      const imageURL = document.getElementById('fb-upload-image-url')?.value.trim();
-      const likesCount = parseInt(document.getElementById('fb-upload-likes')?.value, 10) || 1500;
+      const caption = (document.getElementById('ig-upload-caption') || document.getElementById('fb-upload-caption'))?.value.trim();
+      const timeText = (document.getElementById('ig-upload-time') || document.getElementById('fb-upload-time'))?.value.trim() || 'Just now';
+      const urlText = (document.getElementById('ig-upload-url') || document.getElementById('fb-upload-url'))?.value.trim() || 'https://www.instagram.com/bombshellgrenade';
+      const imageURL = (document.getElementById('ig-upload-image-url') || document.getElementById('fb-upload-image-url'))?.value.trim();
+      const likesCount = parseInt((document.getElementById('ig-upload-likes') || document.getElementById('fb-upload-likes'))?.value, 10) || 12500;
 
       if (!caption) {
-        showToast('Please enter the Facebook post caption text.', 'error');
+        showToast('Please enter the Instagram caption text.', 'error');
         return;
       }
 
       const finalImage = uploadedImageData || imageURL || 'src/hero-banner.jpg';
 
       const newPost = {
-        id: 'fb-' + Date.now(),
+        id: 'ig-' + Date.now(),
         time: timeText,
-        author: 'Bombshell Grenade',
+        author: 'bombshellgrenade',
         avatar: 'src/about-portrait.jpg',
         text: caption,
         image: finalImage,
         likes: likesCount,
-        comments: Math.floor(likesCount * 0.12),
-        shares: Math.floor(likesCount * 0.05),
-        url: urlText
+        comments: Math.floor(likesCount * 0.08),
+        shares: Math.floor(likesCount * 0.03),
+        url: urlText,
+        isLiveSynced: true
       };
 
-      // Add to front of array to become latest post
-      posts.unshift(newPost);
-      saveStoredFacebookPosts(posts);
+      // Push to backend server for real-time live distribution
+      try {
+        const res = await fetch('/api/instagram/posts', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            caption,
+            image: finalImage,
+            url: urlText,
+            time: timeText,
+            likes: likesCount
+          })
+        });
+        if (res.ok) {
+          const result = await res.json();
+          if (Array.isArray(result.posts)) {
+            posts = result.posts;
+          } else {
+            posts.unshift(newPost);
+          }
+        } else {
+          posts.unshift(newPost);
+        }
+      } catch (err) {
+        posts.unshift(newPost);
+      }
 
-      // Re-render feed on homepage
-      onFeedUpdated();
+      saveStoredInstagramPosts(posts);
+      onFeedUpdated(posts);
+
+      // Broadcast cross-tab
+      if (liveSyncBroadcastChannel) {
+        liveSyncBroadcastChannel.postMessage({
+          type: 'post_added',
+          posts,
+          lastSyncTimestamp: Date.now()
+        });
+      }
 
       // Reset form
       form.reset();
@@ -2182,51 +1611,49 @@ function initFacebookUploadModal(posts, onFeedUpdated) {
       }
 
       closeModal();
-      showToast('New Facebook post successfully updated to homepage bottom feed! 🔥');
+      showToast('New Instagram post published & synchronized in real-time! 🔥');
     });
   }
 
   // Live Sync & Batch Manager Actions (Tab 2)
-  const syncBtn = document.getElementById('btn-sync-fb-live');
-  const resetBtn = document.getElementById('btn-reset-fb-defaults');
-  const jsonTextarea = document.getElementById('fb-json-editor');
-  const importJsonBtn = document.getElementById('btn-import-fb-json');
+  const syncBtn = document.getElementById('btn-sync-ig-live') || document.getElementById('btn-sync-fb-live');
+  const resetBtn = document.getElementById('btn-reset-ig-defaults') || document.getElementById('btn-reset-fb-defaults');
+  const jsonTextarea = document.getElementById('ig-json-editor') || document.getElementById('fb-json-editor');
+  const importJsonBtn = document.getElementById('btn-import-ig-json') || document.getElementById('btn-import-fb-json');
 
   if (jsonTextarea) {
     jsonTextarea.value = JSON.stringify(posts, null, 2);
   }
 
   if (syncBtn) {
-    syncBtn.addEventListener('click', () => {
+    syncBtn.addEventListener('click', async () => {
       syncBtn.disabled = true;
-      syncBtn.innerHTML = '<span>Checking web.facebook.com/BombshellGrenade...</span>';
+      const originalHtml = syncBtn.innerHTML;
+      syncBtn.innerHTML = '<span>Synchronizing in real-time...</span>';
+
+      if (onTriggerLiveSync) {
+        await onTriggerLiveSync(true);
+      }
 
       setTimeout(() => {
-        // Refresh timestamps to simulate live real-time sync with Facebook page
-        if (posts[0]) posts[0].time = 'Just synced with Facebook';
-        if (posts[1]) posts[1].time = 'Today at 14:15';
-        saveStoredFacebookPosts(posts);
-        onFeedUpdated();
-
-        const statusPill = document.getElementById('fb-sync-status-text');
-        if (statusPill) statusPill.textContent = 'Live Synced Just Now';
-
         syncBtn.disabled = false;
-        syncBtn.innerHTML = '<svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg> <span>Sync Latest from Facebook Page</span>';
-
-        showToast('Successfully synchronized latest 3 posts from official Facebook page!');
-      }, 900);
+        syncBtn.innerHTML = originalHtml;
+        if (jsonTextarea) jsonTextarea.value = JSON.stringify(posts, null, 2);
+      }, 500);
     });
   }
 
   if (resetBtn) {
-    resetBtn.addEventListener('click', () => {
+    resetBtn.addEventListener('click', async () => {
+      try {
+        await fetch('/api/instagram/reset', { method: 'POST' });
+      } catch {}
       posts.length = 0;
-      DEFAULT_FB_POSTS.forEach(p => posts.push(p));
-      saveStoredFacebookPosts(posts);
-      onFeedUpdated();
+      DEFAULT_IG_POSTS.forEach(p => posts.push(p));
+      saveStoredInstagramPosts(posts);
+      onFeedUpdated(posts);
       if (jsonTextarea) jsonTextarea.value = JSON.stringify(posts, null, 2);
-      showToast('Facebook feed reset to curated official page posts.');
+      showToast('Instagram feed reset to curated official page posts.');
     });
   }
 
@@ -2237,10 +1664,10 @@ function initFacebookUploadModal(posts, onFeedUpdated) {
         if (Array.isArray(imported) && imported.length > 0) {
           posts.length = 0;
           imported.forEach(p => posts.push(p));
-          saveStoredFacebookPosts(posts);
-          onFeedUpdated();
+          saveStoredInstagramPosts(posts);
+          onFeedUpdated(posts);
           closeModal();
-          showToast('Facebook posts successfully updated from JSON feed!');
+          showToast('Instagram posts successfully updated from JSON feed in real-time!');
         } else {
           showToast('JSON must be an array of post objects.', 'error');
         }
@@ -2250,4 +1677,8 @@ function initFacebookUploadModal(posts, onFeedUpdated) {
     });
   }
 }
+
+// Backwards compatibility alias
+const initFacebookUploadModal = initInstagramUploadModal;
+
 
