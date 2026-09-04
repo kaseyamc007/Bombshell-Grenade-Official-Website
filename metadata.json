@@ -1,0 +1,6 @@
+{
+  "name": "Bombshell Grenade",
+  "description": "Official website for Zambian rapper, singer, actress, and TV personality Bomb$hell Grenade (Bwalya Sophie Chibesakunda), 2021 AFRIMMA Best Female Rapper in Africa.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
