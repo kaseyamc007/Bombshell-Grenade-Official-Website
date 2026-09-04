@@ -27,7 +27,8 @@
        * Real reference photos can be sourced from: web.facebook.com/BombshellGrenade
        ========================================================================== -->
 
-  <!-- Floating Embers Background Canvas -->
+  <!-- Royal Roaring Lion Hologram (MGM Style) & Floating Embers Background Canvases -->
+  <canvas id="lion-hologram-canvas"></canvas>
   <canvas id="ember-canvas"></canvas>
 
   <!-- Global Header & Navigation -->
@@ -89,6 +90,34 @@
               BOMB<span class="text-flame-gradient">$</span>HELL<br />
               <span class="gold-foil">GRENADE</span>
             </h1>
+
+            <!-- Royal Sovereign Title: Mfumukazi -->
+            <div class="hero-royal-title-container" id="hero-royal-title" aria-label="Royal Title Mfumukazi">
+              <div class="hero-royal-crest-line">
+                <span class="royal-crown-emblem" title="Royal Crown">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M5 16L3 5l5.5 5L12 4l3.5 6L21 5l-2 11H5zm14 3c0 .6-.4 1-1 1H6c-.6 0-1-.4-1-1v-1h14v1z"/>
+                  </svg>
+                </span>
+                <span class="royal-title-wordmark">MFUMUKAZI</span>
+                <span class="royal-sparkle-star">✦</span>
+              </div>
+              <div class="hero-royal-subtitle">
+                <span class="royal-meaning-highlight">"A Female King"</span>
+                <span class="royal-sep">&bull;</span>
+                <span class="royal-meaning-sub">Female Royal Ruler</span>
+              </div>
+              <p class="hero-royal-caption">
+                Her royal title meaning <em>A female King or female royal ruler</em> — representing sovereign majesty, lyrical supremacy, and unshakeable Zambian royalty.
+              </p>
+
+              <!-- Interactive MGM Lion Hologram Status Trigger -->
+              <div class="hologram-status-badge" id="holo-lion-trigger" title="Click to command the Sovereign Lion Hologram to Roar">
+                <span class="holo-pulse-dot"></span>
+                <span>LION HOLOGRAM • CLICK TO ROAR</span>
+                <span class="holo-sound-bars"><i></i><i></i><i></i><i></i><i></i></span>
+              </div>
+            </div>
 
             <div class="hero-tagline">
               <span>Award Winning Artist</span>
@@ -247,6 +276,51 @@
       </div>
     </section>
 
+    <!-- =====================================================================
+         Official Facebook Feed (@BombshellGrenade) — Latest 3 Posts
+         ===================================================================== -->
+    <section class="container fb-feed-section" id="facebook-feed-section">
+      <div class="fb-feed-header-wrapper">
+        <div>
+          <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px;">
+            <span class="badge-fire">
+              <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24" style="margin-right: 4px;"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+              Social Radar &bull; Verified Meta Feed
+            </span>
+            <div class="fb-sync-status-pill" id="fb-sync-pill">
+              <span class="fb-sync-dot"></span>
+              <span id="fb-sync-status-text">Live Facebook Feed</span>
+            </div>
+          </div>
+          <h2 style="font-size: clamp(1.8rem, 3.5vw, 2.6rem); margin-bottom: 6px;">
+            LATEST FROM <span class="gold-foil">FACEBOOK</span>
+          </h2>
+          <p style="color: var(--text-muted); font-size: 0.95rem;">
+            Official direct posts from <a href="https://web.facebook.com/BombshellGrenade" target="_blank" rel="noopener noreferrer" style="color: var(--fire-amber); font-weight: 700;">@BombshellGrenade</a> &bull; Keeping the homepage feed updated to the latest 3 posts
+          </p>
+        </div>
+
+        <div class="fb-feed-controls">
+          <!-- Creative Upload / Sync Facebook Posts Button -->
+          <button type="button" class="btn btn-fire btn-sm" id="btn-open-fb-sync-modal" style="display: inline-flex; align-items: center; gap: 8px;">
+            <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
+            <span>Upload / Sync Facebook Post</span>
+          </button>
+
+          <!-- Follow Page Button -->
+          <a href="https://web.facebook.com/BombshellGrenade" target="_blank" rel="noopener noreferrer" class="btn btn-secondary btn-sm" style="display: inline-flex; align-items: center; gap: 8px;">
+            <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+            <span>Visit @BombshellGrenade</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Feed Container (Renders Latest 3 Facebook Posts) -->
+      <div class="fb-posts-grid" id="fb-feed-grid">
+        <!-- Rendered dynamically by script.js -->
+      </div>
+    </section>
+
     <!-- Bomb Nation Fan Callout Banner -->
     <section class="container">
       <div class="bomb-nation-callout" id="home-bomb-nation-callout">
@@ -272,6 +346,168 @@
       </div>
     </section>
   </main>
+
+  <!-- Global Facebook Upload & Sync Studio Modal -->
+  <div class="fb-modal-backdrop" id="fb-upload-modal" role="dialog" aria-modal="true" aria-labelledby="fb-modal-title">
+    <div class="fb-modal-dialog">
+      <header class="fb-modal-header">
+        <div class="fb-modal-header-title">
+          <div style="width: 38px; height: 38px; border-radius: 50%; background: #1877f2; display: flex; align-items: center; justify-content: center; color: #fff;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+          </div>
+          <div>
+            <h3 id="fb-modal-title" style="font-size: 1.15rem; color: #fff; margin: 0;">Facebook Feed Studio</h3>
+            <span style="font-size: 0.78rem; color: var(--text-muted);">Sync &amp; Upload Posts &bull; web.facebook.com/BombshellGrenade</span>
+          </div>
+        </div>
+        <button type="button" class="fb-modal-close" id="fb-modal-close-btn" aria-label="Close modal">
+          <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </header>
+
+      <!-- Tabs Navigation -->
+      <div class="fb-modal-tabs">
+        <button type="button" class="fb-modal-tab-btn active" data-tab="tab-fb-upload">
+          <span>Upload New Post</span>
+        </button>
+        <button type="button" class="fb-modal-tab-btn" data-tab="tab-fb-sync">
+          <span>Live Sync &amp; Feed JSON</span>
+        </button>
+      </div>
+
+      <div class="fb-modal-body">
+        <!-- Tab 1: Upload Post Form -->
+        <div class="fb-modal-tab-pane" id="tab-fb-upload">
+          <form id="fb-upload-form">
+            <div style="margin-bottom: 16px;">
+              <label for="fb-upload-caption" style="display: block; font-size: 0.85rem; font-weight: 700; color: #fff; margin-bottom: 6px;">
+                Post Caption / Status Text *
+              </label>
+              <textarea 
+                id="fb-upload-caption" 
+                rows="4" 
+                class="form-control" 
+                placeholder="Copy or write the post coming from her Facebook page... (hashtags like #MfumuKadzi #BombNation auto-highlight)"
+                required
+                style="width: 100%; background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 12px; color: #fff; font-family: inherit; font-size: 0.92rem; outline: none; resize: vertical;"
+              ></textarea>
+            </div>
+
+            <!-- Media Upload Dropzone -->
+            <div style="margin-bottom: 16px;">
+              <label style="display: block; font-size: 0.85rem; font-weight: 700; color: #fff; margin-bottom: 6px;">
+                Upload Post Photo / Media
+              </label>
+              <div class="fb-dropzone" id="fb-image-dropzone">
+                <input type="file" id="fb-post-file-input" accept="image/*" />
+                <svg width="32" height="32" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="color: var(--fire-orange); margin: 0 auto 8px; display: block;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                <p style="font-size: 0.88rem; color: #fff; font-weight: 600; margin-bottom: 4px;">
+                  Drag &amp; drop post image here, or <span style="color: var(--fire-amber); text-decoration: underline;">browse files</span>
+                </p>
+                <span style="font-size: 0.75rem; color: var(--text-muted);">Supports PNG, JPG, WEBP &bull; Instant local encoding</span>
+                <div>
+                  <img id="fb-dropzone-preview" class="fb-dropzone-preview" alt="Uploaded Preview" />
+                </div>
+              </div>
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <span style="font-size: 0.78rem; color: var(--text-muted);">OR Image URL:</span>
+                <input 
+                  type="url" 
+                  id="fb-upload-image-url" 
+                  placeholder="https://... or src/hero-banner.jpg"
+                  style="flex: 1; background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 8px 12px; color: #fff; font-size: 0.85rem;"
+                />
+              </div>
+            </div>
+
+            <!-- Two Column Row: Date & URL -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 16px;">
+              <div>
+                <label for="fb-upload-time" style="display: block; font-size: 0.85rem; font-weight: 700; color: #fff; margin-bottom: 6px;">
+                  Timestamp
+                </label>
+                <input 
+                  type="text" 
+                  id="fb-upload-time" 
+                  value="Just now" 
+                  placeholder="e.g. 1 hour ago, Yesterday at 16:00"
+                  style="width: 100%; background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 8px 12px; color: #fff; font-size: 0.85rem;"
+                />
+              </div>
+              <div>
+                <label for="fb-upload-url" style="display: block; font-size: 0.85rem; font-weight: 700; color: #fff; margin-bottom: 6px;">
+                  Direct Facebook Post URL
+                </label>
+                <input 
+                  type="url" 
+                  id="fb-upload-url" 
+                  value="https://web.facebook.com/BombshellGrenade" 
+                  placeholder="https://web.facebook.com/BombshellGrenade/posts/..."
+                  style="width: 100%; background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 8px 12px; color: #fff; font-size: 0.85rem;"
+                />
+              </div>
+            </div>
+
+            <!-- Estimated Likes -->
+            <div style="margin-bottom: 24px;">
+              <label for="fb-upload-likes" style="display: block; font-size: 0.85rem; font-weight: 700; color: #fff; margin-bottom: 6px;">
+                Initial Likes / Reactions Count
+              </label>
+              <input 
+                type="number" 
+                id="fb-upload-likes" 
+                value="2400" 
+                min="0"
+                style="width: 100%; background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 8px 12px; color: #fff; font-size: 0.85rem;"
+              />
+            </div>
+
+            <button type="submit" class="btn btn-fire" style="width: 100%; justify-content: center;">
+              <span>Publish to Homepage Bottom Feed</span>
+              <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+            </button>
+          </form>
+        </div>
+
+        <!-- Tab 2: Sync & JSON Feed -->
+        <div class="fb-modal-tab-pane" id="tab-fb-sync" style="display: none;">
+          <div style="background: rgba(234, 88, 12, 0.08); border: 1px solid var(--border-fire); border-radius: var(--radius-sm); padding: 16px; margin-bottom: 20px;">
+            <h4 style="font-size: 0.95rem; color: var(--fire-amber); margin-bottom: 6px; display: flex; align-items: center; gap: 6px;">
+              <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+              Automatic Synchronization Notice
+            </h4>
+            <p style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.6;">
+              Posts uploaded here are immediately stored in browser state and pushed as the newest item, automatically maintaining the <strong>latest 3 Facebook posts</strong> visible to visitors. You can also trigger a live sync check or reset to default curated posts.
+            </p>
+          </div>
+
+          <div style="display: flex; gap: 12px; margin-bottom: 20px; flex-wrap: wrap;">
+            <button type="button" class="btn btn-fire btn-sm" id="btn-sync-fb-live" style="display: inline-flex; align-items: center; gap: 6px;">
+              <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+              <span>Sync Latest from Facebook Page</span>
+            </button>
+            <button type="button" class="btn btn-secondary btn-sm" id="btn-reset-fb-defaults">
+              <span>Reset to Curated Defaults</span>
+            </button>
+          </div>
+
+          <div>
+            <label for="fb-json-editor" style="display: block; font-size: 0.85rem; font-weight: 700; color: #fff; margin-bottom: 6px;">
+              Batch Feed JSON (Import / Export)
+            </label>
+            <textarea 
+              id="fb-json-editor" 
+              rows="6" 
+              style="width: 100%; background: #08080c; border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 10px; color: #a5f3fc; font-family: monospace; font-size: 0.78rem; outline: none; margin-bottom: 12px;"
+            ></textarea>
+            <button type="button" class="btn btn-secondary btn-sm" id="btn-import-fb-json">
+              <span>Update Feed from JSON</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <!-- Global Footer -->
   <footer class="site-footer" id="main-footer">

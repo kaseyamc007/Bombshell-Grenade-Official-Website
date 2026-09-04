@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg width="420" height="90" viewBox="0 0 420 90" fill="none" xmlns="http://www.w3.org/2000/svg">
+<svg width="520" height="90" viewBox="0 0 520 90" fill="none" xmlns="http://www.w3.org/2000/svg">
   <defs>
     <linearGradient id="logoFlame" x1="0%" y1="0%" x2="100%" y2="0%">
       <stop offset="0%" stop-color="#fbbf24" />
@@ -35,10 +35,10 @@
 
   <!-- Wordmark -->
   <g transform="translate(75, 42)">
-    <text x="0" y="0" fill="url(#goldMetal)" font-family="'Cinzel', 'Montserrat', 'Syne', sans-serif" font-size="27" font-weight="900" letter-spacing="4">
+    <text x="0" y="0" fill="url(#goldMetal)" font-family="'Cinzel', 'Montserrat', 'Syne', sans-serif" font-size="26" font-weight="900" letter-spacing="3">
       BOMB<tspan fill="#ea580c">$</tspan>HELL
     </text>
-    <text x="210" y="0" fill="#ffffff" font-family="'Cinzel', 'Montserrat', 'Syne', sans-serif" font-size="27" font-weight="900" letter-spacing="4">
+    <text x="185" y="0" fill="#ffffff" font-family="'Cinzel', 'Montserrat', 'Syne', sans-serif" font-size="26" font-weight="900" letter-spacing="3">
       GRENADE
     </text>
     <text x="2" y="20" fill="#ea580c" font-family="'Plus Jakarta Sans', sans-serif" font-size="9" font-weight="800" letter-spacing="6">
